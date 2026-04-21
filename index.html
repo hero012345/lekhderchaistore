@@ -2,8 +2,13 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#78350f" />
     <title>متجر الشاي الذهبي - POS Pro</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
@@ -13,23 +18,74 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
 
     <style>
+      * {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      @media (max-width: 640px) {
+        html {
+          font-size: 14px;
+        }
+        .text-3xl {
+          font-size: 1.5rem !important;
+        }
+        .text-2xl {
+          font-size: 1.25rem !important;
+        }
+      }
+
       .pin-box {
-        letter-spacing: 8px;
-        font-size: 28px;
+        letter-spacing: 0.5em;
+        font-size: clamp(1.5rem, 5vw, 2rem);
+      }
+      .step {
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
+        padding: 0.5rem 1rem;
       }
       .step-active {
         background-color: #451a03;
         color: white;
       }
+
+      .sidebar {
+        width: 280px;
+        transition: transform 0.3s ease;
+      }
+
+      @media (max-width: 1024px) {
+        .sidebar {
+          position: fixed;
+          left: 0;
+          top: 0;
+          height: 100vh;
+          z-index: 40;
+          transform: translateX(-100%);
+        }
+        .sidebar.open {
+          transform: translateX(0);
+        }
+        .sidebar-overlay {
+          display: none;
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 39;
+        }
+        .sidebar-overlay.active {
+          display: block;
+        }
+      }
+
       .sidebar-item {
-        padding: 15px 20px;
-        margin-bottom: 8px;
+        padding: clamp(0.75rem, 2vw, 1rem) 1.25rem;
+        margin-bottom: 0.5rem;
         border-radius: 15px;
         cursor: pointer;
         transition: all 0.3s;
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 0.75rem;
+        font-size: clamp(0.875rem, 2vw, 1rem);
       }
       .sidebar-item:hover {
         background-color: #78350f;
@@ -43,23 +99,23 @@
         display: none;
         position: fixed;
         z-index: 50;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
+        inset: 0;
         overflow: auto;
         background-color: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(4px);
+        padding: 1rem;
       }
       .modal-content {
         background-color: #fefefe;
-        margin: 5% auto;
+        margin: auto;
         padding: 0;
         border-radius: 20px;
-        width: 90%;
+        width: 100%;
         max-width: 600px;
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         animation: slideDown 0.3s ease-out;
+        max-height: 90vh;
+        overflow-y: auto;
       }
       @keyframes slideDown {
         from {
@@ -98,27 +154,30 @@
       .sync-success {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: white;
-        padding: 15px;
+        padding: 1rem;
         border-radius: 12px;
-        margin-top: 10px;
+        margin-top: 0.5rem;
         font-weight: 600;
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
       }
       .sync-error {
         background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
         color: white;
-        padding: 15px;
+        padding: 1rem;
         border-radius: 12px;
-        margin-top: 10px;
+        margin-top: 0.5rem;
         font-weight: 600;
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
       }
       .sync-loading {
         background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
         color: white;
-        padding: 15px;
+        padding: 1rem;
         border-radius: 12px;
-        margin-top: 10px;
+        margin-top: 0.5rem;
         font-weight: 600;
         animation: pulse 1.5s infinite;
+        font-size: clamp(0.75rem, 2vw, 0.875rem);
       }
       @keyframes pulse {
         0%,
@@ -129,48 +188,129 @@
           opacity: 0.7;
         }
       }
+
+      .mobile-menu-btn {
+        display: none;
+        position: fixed;
+        bottom: 1rem;
+        left: 1rem;
+        z-index: 50;
+        background: #78350f;
+        color: white;
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 50%;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+      }
+      @media (max-width: 1024px) {
+        .mobile-menu-btn {
+          display: flex;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .grid-cols-12 > * {
+          grid-column: span 12 !important;
+        }
+        .grid-cols-2 {
+          grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+        }
+        .grid-cols-3 {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+        .grid-cols-4 {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+      }
+
+      @media (max-width: 768px) {
+        table {
+          font-size: 0.75rem;
+        }
+        th,
+        td {
+          padding: 0.5rem !important;
+        }
+      }
+
+      .setup-link-box {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        padding: 1rem;
+        border-radius: 1rem;
+        margin-top: 1rem;
+        word-break: break-all;
+      }
+
+      /* Stats Cards */
+      .stat-card {
+        background: linear-gradient(
+          135deg,
+          var(--tw-gradient-from),
+          var(--tw-gradient-to)
+        );
+        color: white;
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
     </style>
   </head>
   <body class="bg-amber-50">
-    <!-- شاشة الإعداد -->
+    <button
+      id="mobileMenuBtn"
+      class="mobile-menu-btn"
+      onclick="toggleMobileSidebar()"
+    >
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div
+      id="sidebarOverlay"
+      class="sidebar-overlay"
+      onclick="toggleMobileSidebar()"
+    ></div>
+
+    <!-- Setup Screen - نفس الكود السابق -->
     <div
       id="setupScreen"
-      class="min-h-screen hidden flex items-center justify-center bg-gradient-to-br from-amber-900 to-amber-700"
+      class="min-h-screen hidden flex items-center justify-center bg-gradient-to-br from-amber-900 to-amber-700 p-4"
     >
       <div
-        class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden"
+        class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden"
       >
-        <div class="bg-amber-800 text-white p-6 text-center">
-          <h1 class="text-3xl font-bold">🍵 مرحباً بك في متجر الشاي الذهبي</h1>
-          <p class="mt-2 text-amber-200">دعنا نُعد النظام لأول مرة</p>
+        <div class="bg-amber-800 text-white p-4 sm:p-6 text-center">
+          <h1 class="text-2xl sm:text-3xl font-bold">🍵 مرحباً بك</h1>
+          <p class="mt-2 text-amber-200 text-sm sm:text-base">إعداد النظام</p>
         </div>
-        <div class="flex justify-between px-8 pt-6 text-sm">
-          <div
-            id="step1"
-            class="step px-5 py-2 rounded-full cursor-pointer step-active"
-          >
-            1. معلومات المتجر
+        <div class="flex flex-wrap justify-between px-4 sm:px-8 pt-6 gap-2">
+          <div id="step1" class="step rounded-full cursor-pointer step-active">
+            1. المتجر
           </div>
-          <div id="step2" class="step px-5 py-2 rounded-full cursor-pointer">
-            2. حساب المدير
+          <div id="step2" class="step rounded-full cursor-pointer">
+            2. المدير
           </div>
-          <div id="step3" class="step px-5 py-2 rounded-full cursor-pointer">
-            3. إعداد المزامنة
+          <div id="step3" class="step rounded-full cursor-pointer">
+            3. المزامنة
           </div>
         </div>
-        <div class="p-8" id="setupContent"></div>
-        <div class="flex justify-between p-6 border-t">
+        <div class="p-4 sm:p-8" id="setupContent"></div>
+        <div
+          class="flex flex-col sm:flex-row justify-between gap-3 p-4 sm:p-6 border-t"
+        >
           <button
             onclick="prevStep()"
             id="btnPrev"
-            class="px-8 py-3 text-gray-600 hover:bg-gray-100 rounded-2xl"
+            class="px-6 py-3 text-gray-600 hover:bg-gray-100 rounded-2xl order-2 sm:order-1"
           >
             السابق
           </button>
           <button
             onclick="nextStep()"
             id="btnNext"
-            class="px-10 py-3 bg-amber-700 text-white rounded-2xl hover:bg-amber-800"
+            class="px-8 py-3 bg-amber-700 text-white rounded-2xl hover:bg-amber-800 order-1 sm:order-2"
           >
             التالي
           </button>
@@ -178,20 +318,21 @@
       </div>
     </div>
 
-    <!-- شاشة تسجيل الدخول المحسّنة -->
+    <!-- Login Screen - نفس الكود السابق -->
     <div
       id="loginScreen"
-      class="min-h-screen hidden flex items-center justify-center bg-gradient-to-br from-amber-900 to-amber-700"
+      class="min-h-screen hidden flex items-center justify-center bg-gradient-to-br from-amber-900 to-amber-700 p-4"
     >
-      <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg p-8">
+      <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg p-6 sm:p-8">
         <h1
-          class="text-3xl font-bold text-center text-amber-900 mb-2"
+          class="text-2xl sm:text-3xl font-bold text-center text-amber-900 mb-2"
           id="shopNameDisplay"
         >
-          متجر الشاي الذهبي
+          متجر الشاي
         </h1>
-        <p class="text-center text-gray-600 mb-8">أدخل كودك للدخول</p>
-
+        <p class="text-center text-gray-600 mb-6 sm:mb-8 text-sm sm:text-base">
+          أدخل كودك
+        </p>
         <div class="mb-6">
           <label class="block text-sm font-semibold mb-2 text-gray-700"
             >الكود السري:</label
@@ -200,40 +341,36 @@
             type="password"
             id="pinInputDirect"
             maxlength="6"
-            placeholder="أدخل الكود هنا..."
-            class="w-full text-center text-4xl tracking-widest py-5 border-2 border-amber-300 rounded-2xl focus:outline-none focus:border-amber-600 pin-box"
+            placeholder="أدخل الكود..."
+            class="w-full text-center text-2xl sm:text-4xl tracking-widest py-4 sm:py-5 border-2 border-amber-300 rounded-2xl focus:outline-none focus:border-amber-600 pin-box"
             onkeypress="if (event.key === 'Enter') verifyLoginDirect();"
           />
         </div>
-
         <button
           onclick="verifyLoginDirect()"
-          class="w-full py-5 bg-amber-700 text-white rounded-2xl font-bold text-xl hover:bg-amber-800 shadow-lg mb-4"
+          class="w-full py-4 sm:py-5 bg-amber-700 text-white rounded-2xl font-bold text-lg sm:text-xl hover:bg-amber-800 shadow-lg mb-4"
         >
           <i class="fa-solid fa-right-to-bracket"></i> دخول
         </button>
-
         <div class="text-center">
           <button
             onclick="showPinPad()"
             class="text-amber-700 text-sm hover:underline"
           >
-            أو استخدم لوحة الأرقام
+            لوحة الأرقام
           </button>
         </div>
-
-        <!-- لوحة الأرقام المخفية -->
         <div id="pinPadSection" class="hidden mt-6">
           <input
             type="text"
             id="pinInput"
             maxlength="6"
             readonly
-            class="w-full text-center text-4xl tracking-widest py-5 border-2 border-amber-300 rounded-2xl mb-4 pin-box"
+            class="w-full text-center text-3xl sm:text-4xl tracking-widest py-4 sm:py-5 border-2 border-amber-300 rounded-2xl mb-4 pin-box"
             placeholder="••••••"
           />
-          <div class="grid grid-cols-3 gap-3 mb-4" id="pinPad"></div>
-          <div class="flex gap-4">
+          <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-4" id="pinPad"></div>
+          <div class="flex gap-3 sm:gap-4">
             <button
               onclick="clearPin()"
               class="flex-1 py-3 bg-gray-200 rounded-xl font-semibold"
@@ -251,61 +388,247 @@
       </div>
     </div>
 
-    <!-- التطبيق الرئيسي -->
-    <div id="mainApp" class="hidden">
-      <div class="flex h-screen">
-        <div class="w-72 bg-amber-900 text-white p-5 relative">
+    <!-- Main App -->
+    <div id="mainApp" class="hidden min-h-screen">
+      <div class="flex">
+        <div
+          id="sidebar"
+          class="sidebar bg-amber-900 text-white p-4 sm:p-5 flex flex-col"
+        >
           <div
-            class="text-2xl font-bold text-center mb-10 pb-4 border-b border-amber-700"
+            class="text-xl sm:text-2xl font-bold text-center mb-6 sm:mb-10 pb-4 border-b border-amber-700"
           >
             🍵 الشاي الذهبي
           </div>
-          <div onclick="navigate(0)" class="sidebar-item active">
-            <i class="fa-solid fa-cash-register"></i> <span>نقطة البيع</span>
+          <div class="flex-1 overflow-y-auto">
+            <div
+              onclick="
+                navigate(0);
+                closeMobileSidebar();
+              "
+              class="sidebar-item active"
+            >
+              <i class="fa-solid fa-cash-register"></i> <span>نقطة البيع</span>
+            </div>
+            <div
+              onclick="
+                navigate(1);
+                closeMobileSidebar();
+              "
+              class="sidebar-item"
+            >
+              <i class="fa-solid fa-box"></i> <span>المنتجات</span>
+            </div>
+            <div
+              onclick="
+                navigate(2);
+                closeMobileSidebar();
+              "
+              class="sidebar-item"
+            >
+              <i class="fa-solid fa-users"></i> <span>الديون</span>
+            </div>
+            <div
+              onclick="
+                navigate(3);
+                closeMobileSidebar();
+              "
+              class="sidebar-item"
+            >
+              <i class="fa-solid fa-truck"></i> <span>الموردين</span>
+            </div>
+            <div
+              onclick="
+                navigate(4);
+                closeMobileSidebar();
+              "
+              class="sidebar-item"
+            >
+              <i class="fa-solid fa-chart-bar"></i> <span>التقارير</span>
+            </div>
+            <div
+              onclick="
+                navigate(5);
+                closeMobileSidebar();
+              "
+              class="sidebar-item"
+            >
+              <i class="fa-solid fa-sync"></i> <span>المزامنة</span>
+            </div>
+            <div
+              onclick="
+                navigate(6);
+                closeMobileSidebar();
+              "
+              class="sidebar-item"
+            >
+              <i class="fa-solid fa-user-tie"></i> <span>المدير</span>
+            </div>
           </div>
-          <div onclick="navigate(1)" class="sidebar-item">
-            <i class="fa-solid fa-box"></i> <span>المنتجات</span>
-          </div>
-          <div onclick="navigate(2)" class="sidebar-item">
-            <i class="fa-solid fa-users"></i> <span>الديون والسجل</span>
-          </div>
-          <div onclick="navigate(3)" class="sidebar-item">
-            <i class="fa-solid fa-truck"></i> <span>الموردين</span>
-          </div>
-          <div onclick="navigate(4)" class="sidebar-item">
-            <i class="fa-solid fa-chart-bar"></i> <span>التقارير</span>
-          </div>
-          <div onclick="navigate(5)" class="sidebar-item">
-            <i class="fa-solid fa-sync"></i> <span>المزامنة</span>
-          </div>
-          <div onclick="navigate(6)" class="sidebar-item">
-            <i class="fa-solid fa-user-tie"></i> <span>لوحة المدير</span>
-          </div>
-          <div
-            class="absolute bottom-8 left-6 right-6 bg-amber-800 rounded-2xl p-4"
-          >
-            <div id="currentUserDisplay" class="text-sm mb-2"></div>
+          <div class="mt-auto bg-amber-800 rounded-2xl p-3 sm:p-4">
+            <div id="currentUserDisplay" class="text-xs sm:text-sm mb-2"></div>
             <div id="syncIndicator" class="text-xs text-amber-200 mb-2"></div>
             <button
               onclick="logout()"
-              class="w-full bg-red-600 hover:bg-red-700 py-3 rounded-xl text-sm font-semibold"
+              class="w-full bg-red-600 hover:bg-red-700 py-2 sm:py-3 rounded-xl text-xs sm:text-sm font-semibold"
             >
-              <i class="fa-solid fa-right-from-bracket"></i> تسجيل خروج
+              <i class="fa-solid fa-right-from-bracket"></i> خروج
             </button>
           </div>
         </div>
-        <div class="flex-1 p-8 overflow-auto bg-gray-50" id="mainContent"></div>
+        <div
+          class="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto bg-gray-50"
+          id="mainContent"
+          style="min-height: 100vh"
+        ></div>
       </div>
     </div>
 
-    <!-- Modals -->
+    <!-- ✅ Modal: إضافة/تعديل مورد -->
+    <div id="supplierModal" class="modal">
+      <div class="modal-content">
+        <div
+          class="bg-blue-800 text-white p-4 sm:p-6 rounded-t-2xl flex justify-between items-center"
+        >
+          <h3 class="text-lg sm:text-xl font-bold" id="modalSupplierTitle">
+            إضافة مورد
+          </h3>
+          <button
+            onclick="closeModal('supplierModal')"
+            class="text-white hover:text-gray-200 text-2xl"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="p-4 sm:p-6">
+          <form id="supplierForm" onsubmit="saveSupplier(event)">
+            <input type="hidden" id="supplierId" />
+            <div class="mb-4">
+              <label class="block text-sm font-semibold mb-1"
+                >اسم المورد / الشركة</label
+              >
+              <input
+                type="text"
+                id="supplierName"
+                required
+                class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-semibold mb-1">رقم الهاتف</label>
+              <input
+                type="tel"
+                id="supplierPhone"
+                placeholder="0555123456"
+                class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-semibold mb-1"
+                >العنوان (اختياري)</label
+              >
+              <input
+                type="text"
+                id="supplierAddress"
+                class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+            </div>
+            <div class="flex gap-3 mt-6">
+              <button
+                type="button"
+                onclick="closeModal('supplierModal')"
+                class="flex-1 py-3 bg-gray-200 rounded-xl font-semibold"
+              >
+                إلغاء
+              </button>
+              <button
+                type="submit"
+                class="flex-1 py-3 bg-blue-700 text-white rounded-xl font-semibold"
+              >
+                حفظ
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ Modal: تسجيل مشتريات -->
+    <div id="purchaseModal" class="modal">
+      <div class="modal-content">
+        <div
+          class="bg-green-800 text-white p-4 sm:p-6 rounded-t-2xl flex justify-between items-center"
+        >
+          <h3 class="text-lg sm:text-xl font-bold">تسجيل مشتريات</h3>
+          <button
+            onclick="closeModal('purchaseModal')"
+            class="text-white hover:text-gray-200 text-2xl"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="p-4 sm:p-6">
+          <form id="purchaseForm" onsubmit="savePurchase(event)">
+            <input type="hidden" id="purchaseSupplierId" />
+            <div class="mb-4">
+              <label class="block text-sm font-semibold mb-1">المورد</label>
+              <input
+                type="text"
+                id="purchaseSupplierName"
+                readonly
+                class="w-full p-3 border rounded-xl bg-gray-100 font-bold"
+              />
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-semibold mb-1"
+                >المبلغ الإجمالي (دج)</label
+              >
+              <input
+                type="number"
+                step="0.01"
+                id="purchaseAmount"
+                required
+                class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-green-500 outline-none text-xl font-bold"
+              />
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-semibold mb-1"
+                >ملاحظات (اختياري)</label
+              >
+              <textarea
+                id="purchaseNotes"
+                rows="3"
+                class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
+              ></textarea>
+            </div>
+            <div class="flex gap-3 mt-6">
+              <button
+                type="button"
+                onclick="closeModal('purchaseModal')"
+                class="flex-1 py-3 bg-gray-200 rounded-xl font-semibold"
+              >
+                إلغاء
+              </button>
+              <button
+                type="submit"
+                class="flex-1 py-3 bg-green-700 text-white rounded-xl font-semibold"
+              >
+                تسجيل
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modals الأخرى - مختصرة -->
     <div id="productModal" class="modal">
       <div class="modal-content">
         <div
-          class="bg-amber-800 text-white p-6 rounded-t-2xl flex justify-between items-center"
+          class="bg-amber-800 text-white p-4 sm:p-6 rounded-t-2xl flex justify-between items-center"
         >
-          <h3 class="text-xl font-bold" id="modalProductTitle">
-            إضافة منتج جديد
+          <h3 class="text-lg sm:text-xl font-bold" id="modalProductTitle">
+            إضافة منتج
           </h3>
           <button
             onclick="closeModal('productModal')"
@@ -314,11 +637,11 @@
             &times;
           </button>
         </div>
-        <div class="p-6">
+        <div class="p-4 sm:p-6">
           <form id="productForm" onsubmit="saveProduct(event)">
             <input type="hidden" id="prodId" />
-            <div class="grid grid-cols-2 gap-4 mb-4">
-              <div class="col-span-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
+              <div class="sm:col-span-2">
                 <label class="block text-sm font-semibold mb-1"
                   >اسم المنتج</label
                 >
@@ -330,55 +653,50 @@
                 />
               </div>
               <div>
-                <label class="block text-sm font-semibold mb-1">الباركود</label>
-                <input
+                <label class="block text-sm font-semibold mb-1">الباركود</label
+                ><input
                   type="text"
                   id="prodBarcode"
-                  class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-amber-500 outline-none"
+                  class="w-full p-3 border rounded-xl"
                 />
               </div>
               <div>
-                <label class="block text-sm font-semibold mb-1">الفئة</label>
-                <select
+                <label class="block text-sm font-semibold mb-1">الفئة</label
+                ><select
                   id="prodCategory"
                   class="w-full p-3 border rounded-xl bg-white"
                 >
                   <option value="شاي">شاي</option>
                   <option value="أواني">أواني</option>
-                  <option value="إكسسوارات">إكسسوارات</option>
-                  <option value="أخرى">أخرى</option>
                 </select>
               </div>
               <div>
                 <label class="block text-sm font-semibold mb-1"
                   >وحدة البيع</label
-                >
-                <select
+                ><select
                   id="prodUnit"
                   class="w-full p-3 border rounded-xl bg-white"
                 >
-                  <option value="piece">قطعة / حبة</option>
-                  <option value="kg">كيلو جرام (ميزان)</option>
+                  <option value="piece">قطعة</option>
+                  <option value="kg">كيلو</option>
                   <option value="box">علبة</option>
-                  <option value="bag">كيس / باكت</option>
-                  <option value="gram">جرام</option>
+                  <option value="bag">كيس</option>
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-semibold mb-1">المخزون</label>
-                <input
+                <label class="block text-sm font-semibold mb-1">المخزون</label
+                ><input
                   type="number"
                   id="prodStock"
                   required
-                  class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-amber-500 outline-none"
+                  class="w-full p-3 border rounded-xl"
                 />
               </div>
-              <div class="col-span-2 grid grid-cols-3 gap-3 mt-2">
+              <div class="sm:col-span-2 grid grid-cols-3 gap-2 sm:gap-3 mt-2">
                 <div>
                   <label class="block text-xs text-gray-500 mb-1"
-                    >سعر التكلفة (دج)</label
-                  >
-                  <input
+                    >التكلفة (دج)</label
+                  ><input
                     type="number"
                     step="0.01"
                     id="prodCost"
@@ -387,9 +705,8 @@
                 </div>
                 <div>
                   <label class="block text-xs text-gray-500 mb-1"
-                    >سعر الجملة (دج)</label
-                  >
-                  <input
+                    >الجملة (دج)</label
+                  ><input
                     type="number"
                     step="0.01"
                     id="prodWholesale"
@@ -398,9 +715,8 @@
                 </div>
                 <div>
                   <label class="block text-xs text-amber-600 font-bold mb-1"
-                    >سعر التجزئة (دج)</label
-                  >
-                  <input
+                    >التجزئة (دج)</label
+                  ><input
                     type="number"
                     step="0.01"
                     id="prodRetail"
@@ -422,7 +738,7 @@
                 type="submit"
                 class="flex-1 py-3 bg-amber-700 text-white rounded-xl font-semibold"
               >
-                حفظ المنتج
+                حفظ
               </button>
             </div>
           </form>
@@ -433,9 +749,9 @@
     <div id="debtModal" class="modal">
       <div class="modal-content">
         <div
-          class="bg-orange-800 text-white p-6 rounded-t-2xl flex justify-between items-center"
+          class="bg-orange-800 text-white p-4 sm:p-6 rounded-t-2xl flex justify-between items-center"
         >
-          <h3 class="text-xl font-bold">تسجيل دين جديد</h3>
+          <h3 class="text-lg sm:text-xl font-bold">تسجيل دين</h3>
           <button
             onclick="closeModal('debtModal')"
             class="text-white hover:text-gray-200 text-2xl"
@@ -443,31 +759,29 @@
             &times;
           </button>
         </div>
-        <div class="p-6">
+        <div class="p-4 sm:p-6">
           <form id="debtForm" onsubmit="saveDebt(event)">
             <div class="mb-4">
-              <label class="block text-sm font-semibold mb-1">اسم المدين</label>
-              <input
+              <label class="block text-sm font-semibold mb-1">اسم المدين</label
+              ><input
                 type="text"
                 id="debtCustomer"
                 required
-                class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-orange-500 outline-none"
+                class="w-full p-3 border rounded-xl"
               />
             </div>
             <div class="mb-4">
-              <label class="block text-sm font-semibold mb-1">رقم الهاتف</label>
-              <input
+              <label class="block text-sm font-semibold mb-1">رقم الهاتف</label
+              ><input
                 type="tel"
                 id="debtPhone"
                 placeholder="0555123456"
-                class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-orange-500 outline-none"
+                class="w-full p-3 border rounded-xl"
               />
             </div>
             <div class="mb-4">
-              <label class="block text-sm font-semibold mb-1"
-                >المبلغ الإجمالي (دج)</label
-              >
-              <input
+              <label class="block text-sm font-semibold mb-1">المبلغ (دج)</label
+              ><input
                 type="number"
                 id="debtAmount"
                 readonly
@@ -486,7 +800,7 @@
                 type="submit"
                 class="flex-1 py-3 bg-orange-700 text-white rounded-xl font-semibold"
               >
-                تسجيل الدين
+                تسجيل
               </button>
             </div>
           </form>
@@ -497,10 +811,10 @@
     <div id="workerModal" class="modal">
       <div class="modal-content">
         <div
-          class="bg-green-800 text-white p-6 rounded-t-2xl flex justify-between items-center"
+          class="bg-green-800 text-white p-4 sm:p-6 rounded-t-2xl flex justify-between items-center"
         >
-          <h3 class="text-xl font-bold" id="modalWorkerTitle">
-            إضافة موظف جديد
+          <h3 class="text-lg sm:text-xl font-bold" id="modalWorkerTitle">
+            إضافة موظف
           </h3>
           <button
             onclick="closeModal('workerModal')"
@@ -509,37 +823,36 @@
             &times;
           </button>
         </div>
-        <div class="p-6">
+        <div class="p-4 sm:p-6">
           <form id="workerForm" onsubmit="saveWorker(event)">
             <input type="hidden" id="workerId" />
             <div class="mb-4">
-              <label class="block text-sm font-semibold mb-1">اسم الموظف</label>
-              <input
+              <label class="block text-sm font-semibold mb-1">اسم الموظف</label
+              ><input
                 type="text"
                 id="workerName"
                 required
-                class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
+                class="w-full p-3 border rounded-xl"
               />
             </div>
             <div class="mb-4">
-              <label class="block text-sm font-semibold mb-1">رقم الهاتف</label>
-              <input
+              <label class="block text-sm font-semibold mb-1">رقم الهاتف</label
+              ><input
                 type="tel"
                 id="workerPhone"
                 placeholder="0555123456"
-                class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
+                class="w-full p-3 border rounded-xl"
               />
             </div>
             <div class="mb-4">
               <label class="block text-sm font-semibold mb-1"
-                >الكود السري (4-6 أرقام)</label
-              >
-              <input
+                >الكود (4-6 أرقام)</label
+              ><input
                 type="text"
                 id="workerPin"
                 required
                 maxlength="6"
-                class="w-full p-3 border rounded-xl text-center text-2xl focus:ring-2 focus:ring-green-500 outline-none"
+                class="w-full p-3 border rounded-xl text-center text-2xl"
               />
             </div>
             <div class="flex gap-3 mt-6">
@@ -554,7 +867,7 @@
                 type="submit"
                 class="flex-1 py-3 bg-green-700 text-white rounded-xl font-semibold"
               >
-                حفظ الموظف
+                حفظ
               </button>
             </div>
           </form>
@@ -563,7 +876,7 @@
     </div>
 
     <script>
-      // ====================== البيانات الأساسية ======================
+      // ====================== البيانات ======================
       let db = {
         setupCompleted: false,
         shopName: "متجر الشاي الذهبي",
@@ -573,6 +886,7 @@
         sales: [],
         debts: [],
         suppliers: [],
+        purchases: [], // ✅ جديد: لتسجيل المشتريات من الموردين
         nextInvoice: 1001,
         googleSheetURL: "",
         lastSyncTime: null,
@@ -590,14 +904,32 @@
       let currentPin = "";
       let cart = [];
       let syncInterval = null;
+      const CURRENCY = "دج";
 
-      const CURRENCY = "دج"; // الدينار الجزائري
-
+      // ====================== Startup ======================
       window.onload = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sheetURL = urlParams.get("sheet");
+        const autoSetup = urlParams.get("autoSetup");
+
         const saved = localStorage.getItem("teaShopDB");
         if (saved) {
           db = JSON.parse(saved);
           if (!db.googleSheetURL) db.googleSheetURL = "";
+          if (!db.purchases) db.purchases = []; // للإصدارات القديمة
+        }
+
+        if (sheetURL && autoSetup === "true" && !db.setupCompleted) {
+          quickSetup(sheetURL);
+          return;
+        }
+
+        if (sheetURL && db.setupCompleted) {
+          db.googleSheetURL = decodeURIComponent(sheetURL);
+          saveData();
+          alert("✅ تم تحديث رابط المزامنة");
+          showLoginScreen();
+          return;
         }
 
         if (!db.setupCompleted) {
@@ -608,85 +940,11 @@
         }
       };
 
-      // ====================== Setup ======================
-      function showSetupStep(step) {
-        currentStep = step;
-        document
-          .querySelectorAll(".step")
-          .forEach((el, i) =>
-            el.classList.toggle("step-active", i + 1 === step),
-          );
-        const content = document.getElementById("setupContent");
-
-        if (step === 1) {
-          content.innerHTML = `
-      <h2 class="text-2xl font-bold mb-6">معلومات المتجر</h2>
-      <input id="shopNameInput" type="text" placeholder="اسم المتجر" value="${setupData.shopName || "متجر الشاي الذهبي"}" 
-             class="w-full p-4 border-2 rounded-2xl text-xl focus:outline-none focus:border-amber-600"/>
-      <p class="text-sm text-gray-500 mt-4">سيظهر هذا الاسم في الفواتير والتقارير</p>
-    `;
-        } else if (step === 2) {
-          content.innerHTML = `
-      <h2 class="text-2xl font-bold mb-6">إعداد حساب المدير</h2>
-      <input id="managerNameInput" type="text" placeholder="اسم المدير" value="${setupData.managerName}" 
-             class="w-full p-4 border-2 rounded-2xl mb-4"/>
-      <input id="managerPinInput" type="text" maxlength="6" placeholder="كود المدير (6 أرقام)" 
-             class="w-full p-4 border-2 rounded-2xl text-center text-2xl"/>
-      <p class="text-xs text-gray-500 mt-4">⚠️ احفظ هذا الكود جيداً.</p>
-    `;
-        } else if (step === 3) {
-          content.innerHTML = `
-      <h2 class="text-2xl font-bold mb-6">🔗 إعداد المزامنة (اختياري)</h2>
-      <label class="block text-sm font-semibold mb-2">رابط Google Apps Script:</label>
-      <input id="googleURLInput" type="url" placeholder="https://script.google.com/macros/s/..." 
-             value="${setupData.googleURL}" 
-             class="w-full p-4 border-2 rounded-2xl mb-4 font-mono text-sm"/>
-      <p class="text-xs text-amber-600 mt-4">💡 يمكنك تخطي هذه الخطوة وإعدادها لاحقاً</p>
-    `;
-        }
-      }
-
-      function nextStep() {
-        if (currentStep === 1) {
-          setupData.shopName = document
-            .getElementById("shopNameInput")
-            .value.trim();
-          showSetupStep(2);
-        } else if (currentStep === 2) {
-          const name = document.getElementById("managerNameInput").value.trim();
-          const pin = document.getElementById("managerPinInput").value.trim();
-          if (!name || !pin || pin.length < 4) {
-            alert("يرجى إدخال اسم المدير وكود مكون من 4 أرقام على الأقل");
-            return;
-          }
-          setupData.managerName = name;
-          setupData.managerPin = pin;
-          showSetupStep(3);
-        } else if (currentStep === 3) {
-          finishSetup();
-        }
-      }
-
-      function prevStep() {
-        if (currentStep > 1) showSetupStep(currentStep - 1);
-      }
-
-      function finishSetup() {
-        if (!setupData.managerPin) {
-          alert("يجب إعداد حساب المدير أولاً");
-          return;
-        }
-
+      function quickSetup(sheetURL) {
         db.setupCompleted = true;
-        db.shopName = setupData.shopName || "متجر الشاي الذهبي";
-        db.manager = {
-          name: setupData.managerName,
-          pin: setupData.managerPin,
-          phone: "",
-        };
-        db.googleSheetURL =
-          document.getElementById("googleURLInput")?.value.trim() || "";
-
+        db.shopName = "متجر الشاي الذهبي";
+        db.manager = { name: "المدير", pin: "123456", phone: "" };
+        db.googleSheetURL = decodeURIComponent(sheetURL);
         db.products = [
           {
             id: 1,
@@ -712,7 +970,7 @@
           },
           {
             id: 3,
-            name: "إبريق شاي زجاجي",
+            name: "إبريق شاي",
             barcode: "12345604",
             cost: 900,
             retail: 1800,
@@ -722,14 +980,160 @@
             unit: "piece",
           },
         ];
-
+        db.suppliers = [
+          {
+            id: 1,
+            name: "مورد الشاي الأخضر",
+            phone: "0551234567",
+            address: "",
+            totalPurchases: 0,
+          },
+        ];
         saveData();
-        alert("✅ تم إعداد النظام بنجاح!");
+        alert("✅ إعداد سريع!\n\nكود المدير: 123456");
+        showLoginScreen();
+      }
+
+      function generateSetupLink() {
+        if (!db.googleSheetURL) {
+          alert("⚠️ يجب إعداد رابط Google Sheet أولاً");
+          return;
+        }
+        const baseURL = window.location.origin + window.location.pathname;
+        const setupLink = `${baseURL}?sheet=${encodeURIComponent(db.googleSheetURL)}&autoSetup=true`;
+        navigator.clipboard
+          .writeText(setupLink)
+          .then(() => {
+            alert("✅ تم نسخ رابط الإعداد السريع!");
+          })
+          .catch(() => {
+            prompt("انسخ هذا الرابط:", setupLink);
+          });
+      }
+
+      function toggleMobileSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("sidebarOverlay");
+        sidebar.classList.toggle("open");
+        overlay.classList.toggle("active");
+      }
+
+      function closeMobileSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("sidebarOverlay");
+        sidebar.classList.remove("open");
+        overlay.classList.remove("active");
+      }
+
+      // ====================== Setup - مختصر ======================
+      function showSetupStep(step) {
+        currentStep = step;
+        document
+          .querySelectorAll(".step")
+          .forEach((el, i) =>
+            el.classList.toggle("step-active", i + 1 === step),
+          );
+        const content = document.getElementById("setupContent");
+
+        if (step === 1) {
+          content.innerHTML = `<h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">معلومات المتجر</h2><input id="shopNameInput" type="text" placeholder="اسم المتجر" value="${setupData.shopName || "متجر الشاي الذهبي"}" class="w-full p-3 sm:p-4 border-2 rounded-2xl text-lg sm:text-xl focus:outline-none focus:border-amber-600"/>`;
+        } else if (step === 2) {
+          content.innerHTML = `<h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">حساب المدير</h2><input id="managerNameInput" type="text" placeholder="اسم المدير" value="${setupData.managerName}" class="w-full p-3 sm:p-4 border-2 rounded-2xl mb-4"/><input id="managerPinInput" type="text" maxlength="6" placeholder="كود المدير" class="w-full p-3 sm:p-4 border-2 rounded-2xl text-center text-xl sm:text-2xl"/>`;
+        } else if (step === 3) {
+          content.innerHTML = `<h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">المزامنة (اختياري)</h2><input id="googleURLInput" type="url" placeholder="https://script.google.com/..." value="${setupData.googleURL}" class="w-full p-3 sm:p-4 border-2 rounded-2xl mb-4 text-xs sm:text-sm"/>`;
+        }
+      }
+
+      function nextStep() {
+        if (currentStep === 1) {
+          setupData.shopName = document
+            .getElementById("shopNameInput")
+            .value.trim();
+          showSetupStep(2);
+        } else if (currentStep === 2) {
+          const name = document.getElementById("managerNameInput").value.trim();
+          const pin = document.getElementById("managerPinInput").value.trim();
+          if (!name || !pin || pin.length < 4) {
+            alert("أدخل اسم وكود المدير (4+ أرقام)");
+            return;
+          }
+          setupData.managerName = name;
+          setupData.managerPin = pin;
+          showSetupStep(3);
+        } else if (currentStep === 3) {
+          finishSetup();
+        }
+      }
+
+      function prevStep() {
+        if (currentStep > 1) showSetupStep(currentStep - 1);
+      }
+
+      function finishSetup() {
+        if (!setupData.managerPin) {
+          alert("يجب إعداد المدير");
+          return;
+        }
+        db.setupCompleted = true;
+        db.shopName = setupData.shopName || "متجر الشاي الذهبي";
+        db.manager = {
+          name: setupData.managerName,
+          pin: setupData.managerPin,
+          phone: "",
+        };
+        db.googleSheetURL =
+          document.getElementById("googleURLInput")?.value.trim() || "";
+        db.products = [
+          {
+            id: 1,
+            name: "شاي أخضر 250ج",
+            barcode: "12345601",
+            cost: 350,
+            retail: 650,
+            wholesale: 520,
+            stock: 150,
+            category: "شاي",
+            unit: "bag",
+          },
+          {
+            id: 2,
+            name: "شاي أحمر 500ج",
+            barcode: "12345602",
+            cost: 680,
+            retail: 1250,
+            wholesale: 980,
+            stock: 90,
+            category: "شاي",
+            unit: "bag",
+          },
+          {
+            id: 3,
+            name: "إبريق شاي",
+            barcode: "12345604",
+            cost: 900,
+            retail: 1800,
+            wholesale: 1400,
+            stock: 30,
+            category: "أواني",
+            unit: "piece",
+          },
+        ];
+        db.suppliers = [
+          {
+            id: 1,
+            name: "مورد الشاي",
+            phone: "0551234567",
+            address: "",
+            totalPurchases: 0,
+          },
+        ];
+        saveData();
+        alert("✅ تم الإعداد!");
         document.getElementById("setupScreen").classList.add("hidden");
         showLoginScreen();
       }
 
-      // ====================== Login المحسّن ======================
+      // ====================== Login - مختصر ======================
       function showLoginScreen() {
         document.getElementById("loginScreen").classList.remove("hidden");
         document.getElementById("shopNameDisplay").textContent = db.shopName;
@@ -748,10 +1152,9 @@
         const pad = document.getElementById("pinPad");
         if (!pad) return;
         pad.innerHTML = "";
-        for (let i = 1; i <= 9; i++) {
-          pad.innerHTML += `<button onclick="addPin('${i}')" type="button" class="bg-gray-100 hover:bg-amber-100 py-6 text-2xl font-bold rounded-2xl">${i}</button>`;
-        }
-        pad.innerHTML += `<button onclick="addPin('0')" type="button" class="bg-gray-100 hover:bg-amber-100 py-6 text-2xl font-bold rounded-2xl">0</button>`;
+        for (let i = 1; i <= 9; i++)
+          pad.innerHTML += `<button onclick="addPin('${i}')" type="button" class="bg-gray-100 hover:bg-amber-100 py-4 sm:py-6 text-xl sm:text-2xl font-bold rounded-2xl">${i}</button>`;
+        pad.innerHTML += `<button onclick="addPin('0')" type="button" class="bg-gray-100 hover:bg-amber-100 py-4 sm:py-6 text-xl sm:text-2xl font-bold rounded-2xl">0</button>`;
       }
 
       function addPin(num) {
@@ -762,53 +1165,42 @@
           );
         }
       }
-
       function clearPin() {
         currentPin = "";
         document.getElementById("pinInput").value = "";
       }
 
-      // ✅ التعرف التلقائي على المستخدم من الكود
       function verifyLoginDirect() {
         const pin = document.getElementById("pinInputDirect").value.trim();
         if (!pin) {
-          alert("الرجاء إدخال الكود");
+          alert("أدخل الكود");
           return;
         }
-
-        // التحقق من المدير
         if (pin === db.manager.pin) {
           loginSuccess({ type: "manager", ...db.manager });
           return;
         }
-
-        // التحقق من الموظفين
         const worker = db.workers.find((w) => w.pin === pin);
         if (worker) {
           loginSuccess({ type: "worker", ...worker });
           return;
         }
-
-        alert("❌ الكود غير صحيح");
+        alert("❌ كود خاطئ");
         document.getElementById("pinInputDirect").value = "";
-        document.getElementById("pinInputDirect").focus();
       }
 
       function verifyLoginPad() {
         if (!currentPin) return;
-
         if (currentPin === db.manager.pin) {
           loginSuccess({ type: "manager", ...db.manager });
           return;
         }
-
         const worker = db.workers.find((w) => w.pin === currentPin);
         if (worker) {
           loginSuccess({ type: "worker", ...worker });
           return;
         }
-
-        alert("❌ الكود غير صحيح");
+        alert("❌ كود خاطئ");
         clearPin();
       }
 
@@ -817,13 +1209,13 @@
         document.getElementById("loginScreen").classList.add("hidden");
         document.getElementById("mainApp").classList.remove("hidden");
         document.getElementById("currentUserDisplay").innerHTML =
-          `مسجل كـ: <strong>${user.name}</strong><br><small class="text-amber-200">${user.type === "manager" ? "مدير" : "عامل"}</small>`;
+          `<strong>${user.name}</strong><br><small class="text-amber-200">${user.type === "manager" ? "مدير" : "عامل"}</small>`;
         if (db.autoSyncEnabled && db.googleSheetURL) startAutoSync();
         loadPage(0);
       }
 
       function logout() {
-        if (confirm("هل تريد تسجيل الخروج؟")) {
+        if (confirm("تسجيل خروج؟")) {
           stopAutoSync();
           location.reload();
         }
@@ -844,29 +1236,31 @@
         if (pageNum === 0) loadPOS(content);
         else if (pageNum === 1) loadProducts(content);
         else if (pageNum === 2) loadDebts(content);
-        else if (pageNum === 3) loadSuppliers(content);
-        else if (pageNum === 4) loadReports(content);
+        else if (pageNum === 3)
+          loadSuppliers(content); // ✅ محسّن
+        else if (pageNum === 4)
+          loadReports(content); // ✅ محسّن
         else if (pageNum === 5) loadSync(content);
         else if (pageNum === 6) loadManager(content);
       }
 
-      // ====================== POS ======================
+      // ====================== POS - مختصر ======================
       function loadPOS(container) {
         container.innerHTML = `
-    <h1 class="text-3xl font-bold mb-6 text-gray-800">💰 نقطة البيع (POS)</h1>
-    <div class="grid grid-cols-12 gap-6">
-      <div class="col-span-7 bg-white rounded-3xl shadow-lg p-6">
-        <input type="text" id="barcodeInput" placeholder="امسح الباركود..." class="w-full text-xl p-5 border-2 border-dashed border-amber-400 rounded-2xl mb-6 focus:outline-none focus:border-amber-600" onkeypress="if(event.key==='Enter') { handleBarcode(this.value); this.value=''; }"/>
-        <div id="cartItems" class="max-h-96 overflow-auto mb-6"></div>
-        <div class="border-t-2 pt-4 mb-6"><div class="flex justify-between text-2xl font-bold"><span>الإجمالي:</span><span id="totalAmount" class="text-amber-700">0.00 ${CURRENCY}</span></div></div>
-        <div class="flex gap-4">
-          <button onclick="completeSale(false)" class="flex-1 bg-green-600 text-white py-6 rounded-2xl text-xl font-bold hover:bg-green-700">✅ دفع نقدي</button>
-          <button onclick="completeSale(true)" class="flex-1 bg-orange-600 text-white py-6 rounded-2xl text-xl font-bold hover:bg-orange-700">📝 دين</button>
+    <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-gray-800">💰 نقطة البيع</h1>
+    <div class="grid grid-cols-12 gap-4 sm:gap-6">
+      <div class="col-span-12 lg:col-span-7 bg-white rounded-3xl shadow-lg p-4 sm:p-6">
+        <input type="text" id="barcodeInput" placeholder="امسح الباركود..." class="w-full text-lg sm:text-xl p-3 sm:p-5 border-2 border-dashed border-amber-400 rounded-2xl mb-4 sm:mb-6 focus:outline-none focus:border-amber-600" onkeypress="if(event.key==='Enter') { handleBarcode(this.value); this.value=''; }"/>
+        <div id="cartItems" class="max-h-60 sm:max-h-96 overflow-auto mb-4 sm:mb-6"></div>
+        <div class="border-t-2 pt-4 mb-4 sm:mb-6"><div class="flex justify-between text-xl sm:text-2xl font-bold"><span>الإجمالي:</span><span id="totalAmount" class="text-amber-700">0.00 ${CURRENCY}</span></div></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <button onclick="completeSale(false)" class="bg-green-600 text-white py-4 sm:py-6 rounded-2xl text-lg sm:text-xl font-bold hover:bg-green-700">✅ نقدي</button>
+          <button onclick="completeSale(true)" class="bg-orange-600 text-white py-4 sm:py-6 rounded-2xl text-lg sm:text-xl font-bold hover:bg-orange-700">📝 دين</button>
         </div>
       </div>
-      <div class="col-span-5 bg-white rounded-3xl shadow-lg p-6">
-        <h3 class="font-bold mb-4">المنتجات السريعة</h3>
-        <div class="grid grid-cols-2 gap-3 max-h-screen overflow-auto" id="quickProducts"></div>
+      <div class="col-span-12 lg:col-span-5 bg-white rounded-3xl shadow-lg p-4 sm:p-6">
+        <h3 class="font-bold mb-3 sm:mb-4 text-base sm:text-lg">المنتجات السريعة</h3>
+        <div class="grid grid-cols-2 gap-2 sm:gap-3 max-h-96 overflow-auto" id="quickProducts"></div>
       </div>
     </div>`;
         renderQuickProducts();
@@ -881,8 +1275,8 @@
         db.products.forEach((p) => {
           const div = document.createElement("div");
           div.className =
-            "bg-amber-50 hover:bg-amber-100 p-4 rounded-2xl cursor-pointer border-2 border-amber-200";
-          div.innerHTML = `<div class="font-semibold text-sm mb-2">${p.name}</div><div class="text-amber-700 font-bold">${p.retail} ${CURRENCY}</div>`;
+            "bg-amber-50 hover:bg-amber-100 p-3 sm:p-4 rounded-2xl cursor-pointer border-2 border-amber-200 active:scale-95 transition";
+          div.innerHTML = `<div class="font-semibold text-xs sm:text-sm mb-1 sm:mb-2 truncate">${p.name}</div><div class="text-amber-700 font-bold text-sm sm:text-base">${p.retail} ${CURRENCY}</div>`;
           div.onclick = () => addToCart(p);
           container.appendChild(div);
         });
@@ -907,14 +1301,14 @@
         const container = document.getElementById("cartItems");
         if (!container) return;
         if (cart.length === 0) {
-          container.innerHTML = `<div class="text-center text-gray-400 py-10">السلة فارغة</div>`;
+          container.innerHTML = `<div class="text-center text-gray-400 py-6 sm:py-10 text-sm sm:text-base">السلة فارغة</div>`;
           document.getElementById("totalAmount").textContent =
             `0.00 ${CURRENCY}`;
           return;
         }
-        let html = `<div class="space-y-3">`;
+        let html = `<div class="space-y-2 sm:space-y-3">`;
         cart.forEach((item, i) => {
-          html += `<div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl"><div><div class="font-semibold">${item.name}</div><div class="text-sm text-gray-500">${item.retail} × ${item.qty}</div></div><div class="text-right"><div class="font-bold">${(item.retail * item.qty).toFixed(2)} ${CURRENCY}</div><button onclick="removeFromCart(${i})" class="text-red-600 text-sm mt-1">حذف</button></div></div>`;
+          html += `<div class="flex justify-between items-center bg-gray-50 p-3 sm:p-4 rounded-2xl text-sm sm:text-base"><div class="flex-1 min-w-0"><div class="font-semibold truncate">${item.name}</div><div class="text-xs sm:text-sm text-gray-500">${item.retail} × ${item.qty}</div></div><div class="text-right ml-2"><div class="font-bold">${(item.retail * item.qty).toFixed(2)} ${CURRENCY}</div><button onclick="removeFromCart(${i})" class="text-red-600 text-xs sm:text-sm mt-1">حذف</button></div></div>`;
         });
         html += `</div>`;
         container.innerHTML = html;
@@ -936,7 +1330,7 @@
           db.products.find((p) => p.barcode === barcode) ||
           db.products.find((p) => p.name.includes(barcode));
         if (product) addToCart(product);
-        else alert("❌ المنتج غير موجود");
+        else alert("❌ غير موجود");
       }
 
       function completeSale(isDebt) {
@@ -945,9 +1339,7 @@
           (sum, item) => sum + item.retail * item.qty,
           0,
         );
-
         if (isDebt) {
-          // فتح نافذة تسجيل الدين
           document.getElementById("debtAmount").value = total.toFixed(2);
           document.getElementById("debtModal").style.display = "block";
         } else {
@@ -960,12 +1352,10 @@
           };
           db.sales.push(sale);
           printReceipt(cart, total);
-
           cart.forEach((item) => {
             const prod = db.products.find((p) => p.id === item.id);
             if (prod) prod.stock -= item.qty;
           });
-
           cart = [];
           saveData();
           if (db.googleSheetURL) syncToGoogleSheets(true);
@@ -978,7 +1368,6 @@
         const customer = document.getElementById("debtCustomer").value;
         const phone = document.getElementById("debtPhone").value;
         const amount = parseFloat(document.getElementById("debtAmount").value);
-
         db.debts.push({
           id: Date.now(),
           customer: customer,
@@ -989,23 +1378,21 @@
           date: new Date().toLocaleDateString("ar-DZ"),
           items: cart.map((c) => `${c.name} × ${c.qty}`).join(", "),
         });
-
         cart.forEach((item) => {
           const prod = db.products.find((p) => p.id === item.id);
           if (prod) prod.stock -= item.qty;
         });
-
         cart = [];
         saveData();
         if (db.googleSheetURL) syncToGoogleSheets(true);
         closeModal("debtModal");
-        alert(`✅ تم تسجيل دين بقيمة ${amount.toFixed(2)} ${CURRENCY}`);
+        alert(`✅ دين: ${amount.toFixed(2)} ${CURRENCY}`);
         loadPage(0);
       }
 
       function printReceipt(items, total) {
         const invoiceNum = db.nextInvoice - 1;
-        const receiptHTML = `<div class="thermal-receipt"><div class="text-center font-bold text-xl mb-3">${db.shopName}</div><div class="text-center mb-2">فاتورة #${invoiceNum}</div><div class="text-xs mb-3">${new Date().toLocaleString("ar-DZ")}</div><hr>${items.map((item) => `<div class="flex justify-between text-sm mt-2"><span>${item.name} × ${item.qty}</span><span>${(item.retail * item.qty).toFixed(0)}</span></div>`).join("")}<hr class="my-3"><div class="flex justify-between font-bold text-lg"><span>الإجمالي</span><span>${total.toFixed(0)} ${CURRENCY}</span></div><div class="text-center text-xs mt-6">شكراً لكم ☕</div></div>`;
+        const receiptHTML = `<div class="thermal-receipt"><div class="text-center font-bold text-xl mb-3">${db.shopName}</div><div class="text-center mb-2">فاتورة #${invoiceNum}</div><div class="text-xs mb-3">${new Date().toLocaleString("ar-DZ")}</div><hr>${items.map((item) => `<div class="flex justify-between text-sm mt-2"><span>${item.name} × ${item.qty}</span><span>${(item.retail * item.qty).toFixed(0)}</span></div>`).join("")}<hr class="my-3"><div class="flex justify-between font-bold text-lg"><span>الإجمالي</span><span>${total.toFixed(0)} ${CURRENCY}</span></div><div class="text-center text-xs mt-6">شكراً ☕</div></div>`;
         const printWindow = window.open("", "_blank", "width=400,height=600");
         printWindow.document.write(
           `<html dir="rtl"><head><style>body{font-family:monospace;padding:10px;}</style></head><body onload="window.print();setTimeout(()=>window.close(),500);">${receiptHTML}</body></html>`,
@@ -1013,11 +1400,11 @@
         printWindow.document.close();
       }
 
-      // ====================== Products ======================
+      // ====================== Products - مختصر ======================
       function loadProducts(container) {
-        let html = `<div class="flex justify-between mb-6"><h1 class="text-3xl font-bold">📦 المنتجات</h1><button onclick="openProductModal()" class="bg-amber-700 text-white px-6 py-3 rounded-2xl">➕ منتج جديد</button></div><div class="grid gap-4">`;
+        let html = `<div class="flex flex-col sm:flex-row justify-between gap-3 mb-4 sm:mb-6"><h1 class="text-2xl sm:text-3xl font-bold">📦 المنتجات</h1><button onclick="openProductModal()" class="bg-amber-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-2xl text-sm sm:text-base">➕ منتج جديد</button></div><div class="grid gap-3 sm:gap-4">`;
         db.products.forEach((p) => {
-          html += `<div class="bg-white p-6 rounded-3xl flex justify-between shadow-lg"><div><div class="font-bold text-lg">${p.name}</div><div class="text-sm text-gray-600 mt-2">مخزون: ${p.stock} | تجزئة: ${p.retail} ${CURRENCY} | جملة: ${p.wholesale} ${CURRENCY}</div></div><div class="flex gap-3"><button onclick="openProductModal(${p.id})" class="text-blue-600 px-5 py-2 border-2 border-blue-200 rounded-xl">تعديل</button><button onclick="deleteProduct(${p.id})" class="text-red-600 px-5 py-2 border-2 border-red-200 rounded-xl">حذف</button></div></div>`;
+          html += `<div class="bg-white p-4 sm:p-6 rounded-3xl flex flex-col sm:flex-row justify-between gap-3 shadow-lg"><div class="flex-1"><div class="font-bold text-base sm:text-lg mb-2">${p.name}</div><div class="text-xs sm:text-sm text-gray-600">مخزون: ${p.stock} | تجزئة: ${p.retail} ${CURRENCY}</div></div><div class="flex gap-2 sm:gap-3"><button onclick="openProductModal(${p.id})" class="text-blue-600 px-3 sm:px-5 py-2 border-2 border-blue-200 rounded-xl text-xs sm:text-sm">تعديل</button><button onclick="deleteProduct(${p.id})" class="text-red-600 px-3 sm:px-5 py-2 border-2 border-red-200 rounded-xl text-xs sm:text-sm">حذف</button></div></div>`;
         });
         html += `</div>`;
         container.innerHTML = html;
@@ -1027,8 +1414,7 @@
         const modal = document.getElementById("productModal");
         if (id) {
           const p = db.products.find((x) => x.id === id);
-          document.getElementById("modalProductTitle").textContent =
-            "تعديل منتج";
+          document.getElementById("modalProductTitle").textContent = "تعديل";
           document.getElementById("prodId").value = p.id;
           document.getElementById("prodName").value = p.name;
           document.getElementById("prodBarcode").value = p.barcode;
@@ -1039,8 +1425,7 @@
           document.getElementById("prodWholesale").value = p.wholesale;
           document.getElementById("prodRetail").value = p.retail;
         } else {
-          document.getElementById("modalProductTitle").textContent =
-            "إضافة منتج";
+          document.getElementById("modalProductTitle").textContent = "إضافة";
           document.getElementById("productForm").reset();
           document.getElementById("prodId").value = "";
         }
@@ -1063,14 +1448,12 @@
             parseFloat(document.getElementById("prodWholesale").value) || 0,
           retail: parseFloat(document.getElementById("prodRetail").value) || 0,
         };
-
         if (id) {
           const index = db.products.findIndex((p) => p.id == id);
           db.products[index] = newProd;
         } else {
           db.products.push(newProd);
         }
-
         saveData();
         if (db.googleSheetURL) syncToGoogleSheets(true);
         closeModal("productModal");
@@ -1078,7 +1461,7 @@
       }
 
       function deleteProduct(id) {
-        if (confirm("حذف المنتج؟")) {
+        if (confirm("حذف؟")) {
           db.products = db.products.filter((p) => p.id !== id);
           saveData();
           if (db.googleSheetURL) syncToGoogleSheets(true);
@@ -1086,116 +1469,233 @@
         }
       }
 
-      // ====================== Debts المحسّن ======================
+      // ====================== Debts - مختصر ======================
       function loadDebts(container) {
         const totalDebts = db.debts.reduce((sum, d) => sum + d.remaining, 0);
-
-        let html = `
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold text-gray-800">📋 الديون والسجل</h1>
-      <div class="bg-red-100 text-red-800 px-6 py-3 rounded-2xl font-bold text-xl">
-        إجمالي الديون: ${totalDebts.toFixed(2)} ${CURRENCY}
-      </div>
-    </div>
-    
-    <div class="bg-white rounded-3xl shadow-lg p-6 overflow-x-auto">
-      <table class="w-full">
-        <thead class="bg-amber-50">
-          <tr>
-            <th class="p-3 text-right">العميل</th>
-            <th class="p-3 text-right">رقم الهاتف</th>
-            <th class="p-3 text-right">المبلغ الكلي</th>
-            <th class="p-3 text-right">المدفوع</th>
-            <th class="p-3 text-right">المتبقي</th>
-            <th class="p-3 text-right">التاريخ</th>
-            <th class="p-3 text-right">المنتجات</th>
-            <th class="p-3 text-right">إجراءات</th>
-          </tr>
-        </thead>
-        <tbody>
-  `;
-
+        let html = `<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6"><h1 class="text-2xl sm:text-3xl font-bold text-gray-800">📋 الديون</h1><div class="bg-red-100 text-red-800 px-4 sm:px-6 py-2 sm:py-3 rounded-2xl font-bold text-base sm:text-xl">إجمالي: ${totalDebts.toFixed(2)} ${CURRENCY}</div></div><div class="bg-white rounded-3xl shadow-lg p-3 sm:p-6 overflow-x-auto"><table class="w-full text-xs sm:text-sm"><thead class="bg-amber-50"><tr><th class="p-2 sm:p-3 text-right">العميل</th><th class="p-2 sm:p-3 text-right hidden sm:table-cell">الهاتف</th><th class="p-2 sm:p-3 text-right">المبلغ</th><th class="p-2 sm:p-3 text-right">المتبقي</th><th class="p-2 sm:p-3 text-right">إجراء</th></tr></thead><tbody>`;
         db.debts.forEach((debt) => {
-          html += `
-      <tr class="border-b hover:bg-gray-50">
-        <td class="p-3 font-semibold">${debt.customer}</td>
-        <td class="p-3 text-gray-600">
-          ${debt.phone ? `<a href="tel:${debt.phone}" class="text-blue-600 hover:underline">${debt.phone}</a>` : "-"}
-        </td>
-        <td class="p-3">${debt.amount.toFixed(2)} ${CURRENCY}</td>
-        <td class="p-3 text-green-600">${debt.paid.toFixed(2)} ${CURRENCY}</td>
-        <td class="p-3 text-red-600 font-bold">${debt.remaining.toFixed(2)} ${CURRENCY}</td>
-        <td class="p-3 text-sm text-gray-500">${debt.date}</td>
-        <td class="p-3 text-xs text-gray-500">${debt.items || "-"}</td>
-        <td class="p-3">
-          <button onclick="payDebt(${debt.id})" class="bg-green-100 text-green-700 px-4 py-2 rounded-xl hover:bg-green-200 text-sm">
-            💰 دفع
-          </button>
-        </td>
-      </tr>
-    `;
+          html += `<tr class="border-b hover:bg-gray-50"><td class="p-2 sm:p-3 font-semibold">${debt.customer}</td><td class="p-2 sm:p-3 text-gray-600 hidden sm:table-cell">${debt.phone ? `<a href="tel:${debt.phone}" class="text-blue-600">${debt.phone}</a>` : "-"}</td><td class="p-2 sm:p-3">${debt.amount.toFixed(0)} ${CURRENCY}</td><td class="p-2 sm:p-3 text-red-600 font-bold">${debt.remaining.toFixed(0)} ${CURRENCY}</td><td class="p-2 sm:p-3"><button onclick="payDebt(${debt.id})" class="bg-green-100 text-green-700 px-2 sm:px-4 py-1 sm:py-2 rounded-xl hover:bg-green-200 text-xs sm:text-sm">💰</button></td></tr>`;
         });
-
-        html += `
-        </tbody>
-      </table>
-    </div>
-  `;
-
+        html += `</tbody></table></div>`;
         container.innerHTML = html;
       }
 
       function payDebt(debtId) {
         const debt = db.debts.find((d) => d.id === debtId);
         if (!debt) return;
-
         const amount = parseFloat(
-          prompt(
-            `المتبقي: ${debt.remaining} ${CURRENCY}\nأدخل المبلغ المدفوع:`,
-          ),
+          prompt(`المتبقي: ${debt.remaining} ${CURRENCY}\nالمبلغ المدفوع:`),
         );
         if (!amount || amount <= 0) return;
         if (amount > debt.remaining) {
-          alert("⚠️ المبلغ أكبر من المتبقي");
+          alert("⚠️ أكبر من المتبقي");
           return;
         }
-
         debt.paid += amount;
         debt.remaining -= amount;
-
         if (debt.remaining <= 0) {
           db.debts = db.debts.filter((d) => d.id !== debtId);
-          alert("✅ تم سداد الدين بالكامل");
+          alert("✅ سُدد بالكامل");
         } else {
           alert(
-            `✅ تم تسجيل دفعة بقيمة ${amount} ${CURRENCY}\nالمتبقي: ${debt.remaining.toFixed(2)} ${CURRENCY}`,
+            `✅ دفعة: ${amount} ${CURRENCY}\nالمتبقي: ${debt.remaining.toFixed(2)} ${CURRENCY}`,
           );
         }
-
         saveData();
         if (db.googleSheetURL) syncToGoogleSheets(true);
         loadPage(2);
       }
 
-      // ====================== Suppliers ======================
+      // ====================== ✅ الموردين - محسّن بالكامل ======================
       function loadSuppliers(container) {
-        container.innerHTML = `<h1 class="text-3xl font-bold mb-6">🚚 الموردين</h1><p>عدد الموردين: ${db.suppliers.length}</p>`;
+        const totalPurchases = db.suppliers.reduce(
+          (sum, s) => sum + (s.totalPurchases || 0),
+          0,
+        );
+
+        container.innerHTML = `
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6">
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">🚚 الموردين</h1>
+      <div class="flex gap-3">
+        <div class="bg-blue-100 text-blue-800 px-4 sm:px-6 py-2 sm:py-3 rounded-2xl font-bold text-sm sm:text-base">
+          إجمالي المشتريات: ${totalPurchases.toFixed(2)} ${CURRENCY}
+        </div>
+        <button onclick="openSupplierModal()" class="bg-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-2xl font-semibold text-sm sm:text-base">
+          ➕ مورد جديد
+        </button>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      ${
+        db.suppliers.length === 0
+          ? `
+        <div class="col-span-full text-center py-20 text-gray-400">
+          <i class="fa-solid fa-truck text-6xl mb-4"></i>
+          <p class="text-xl">لا يوجد موردين حتى الآن</p>
+          <button onclick="openSupplierModal()" class="mt-6 bg-blue-700 text-white px-8 py-3 rounded-2xl font-semibold">
+            إضافة أول مورد
+          </button>
+        </div>
+      `
+          : db.suppliers
+              .map(
+                (s) => `
+        <div class="bg-white p-6 rounded-3xl shadow-lg border-2 border-gray-100 hover:border-blue-200 transition">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex-1">
+              <h3 class="font-bold text-lg sm:text-xl mb-2">${s.name}</h3>
+              ${s.phone ? `<p class="text-gray-600 text-sm mb-1">📞 <a href="tel:${s.phone}" class="text-blue-600 hover:underline">${s.phone}</a></p>` : ""}
+              ${s.address ? `<p class="text-gray-500 text-xs">📍 ${s.address}</p>` : ""}
+            </div>
+            <button onclick="deleteSupplier(${s.id})" class="text-red-500 hover:text-red-700 p-2">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+          
+          <div class="bg-blue-50 p-4 rounded-2xl mb-4">
+            <div class="text-xs text-blue-600 mb-1">إجمالي المشتريات</div>
+            <div class="text-2xl font-bold text-blue-800">${(s.totalPurchases || 0).toFixed(2)} ${CURRENCY}</div>
+          </div>
+          
+          <div class="flex gap-2">
+            <button onclick="openPurchaseModal(${s.id})" class="flex-1 bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 text-sm">
+              ➕ تسجيل مشتريات
+            </button>
+            <button onclick="editSupplier(${s.id})" class="bg-gray-100 text-gray-700 px-4 py-3 rounded-xl hover:bg-gray-200">
+              <i class="fa-solid fa-edit"></i>
+            </button>
+          </div>
+        </div>
+      `,
+              )
+              .join("")
+      }
+    </div>
+  `;
       }
 
-      // ====================== التقارير المفصلة (للمدير فقط) ======================
+      function openSupplierModal(id = null) {
+        const modal = document.getElementById("supplierModal");
+
+        if (id) {
+          const s = db.suppliers.find((x) => x.id === id);
+          document.getElementById("modalSupplierTitle").textContent =
+            "تعديل مورد";
+          document.getElementById("supplierId").value = s.id;
+          document.getElementById("supplierName").value = s.name;
+          document.getElementById("supplierPhone").value = s.phone || "";
+          document.getElementById("supplierAddress").value = s.address || "";
+        } else {
+          document.getElementById("modalSupplierTitle").textContent =
+            "إضافة مورد جديد";
+          document.getElementById("supplierForm").reset();
+          document.getElementById("supplierId").value = "";
+        }
+
+        modal.style.display = "block";
+      }
+
+      function saveSupplier(e) {
+        e.preventDefault();
+        const id = document.getElementById("supplierId").value;
+        const newSupplier = {
+          id: id ? parseInt(id) : Date.now(),
+          name: document.getElementById("supplierName").value,
+          phone: document.getElementById("supplierPhone").value,
+          address: document.getElementById("supplierAddress").value,
+          totalPurchases: id
+            ? db.suppliers.find((s) => s.id == id).totalPurchases
+            : 0,
+        };
+
+        if (id) {
+          const index = db.suppliers.findIndex((s) => s.id == id);
+          db.suppliers[index] = newSupplier;
+        } else {
+          db.suppliers.push(newSupplier);
+        }
+
+        saveData();
+        if (db.googleSheetURL) syncToGoogleSheets(true);
+        closeModal("supplierModal");
+        loadPage(3);
+      }
+
+      function editSupplier(id) {
+        openSupplierModal(id);
+      }
+
+      function deleteSupplier(id) {
+        if (confirm("هل تريد حذف هذا المورد؟")) {
+          db.suppliers = db.suppliers.filter((s) => s.id !== id);
+          saveData();
+          if (db.googleSheetURL) syncToGoogleSheets(true);
+          loadPage(3);
+        }
+      }
+
+      function openPurchaseModal(supplierId) {
+        const supplier = db.suppliers.find((s) => s.id === supplierId);
+        if (!supplier) return;
+
+        document.getElementById("purchaseSupplierId").value = supplierId;
+        document.getElementById("purchaseSupplierName").value = supplier.name;
+        document.getElementById("purchaseAmount").value = "";
+        document.getElementById("purchaseNotes").value = "";
+
+        document.getElementById("purchaseModal").style.display = "block";
+      }
+
+      function savePurchase(e) {
+        e.preventDefault();
+        const supplierId = parseInt(
+          document.getElementById("purchaseSupplierId").value,
+        );
+        const amount = parseFloat(
+          document.getElementById("purchaseAmount").value,
+        );
+        const notes = document.getElementById("purchaseNotes").value;
+
+        const supplier = db.suppliers.find((s) => s.id === supplierId);
+        if (!supplier) return;
+
+        supplier.totalPurchases = (supplier.totalPurchases || 0) + amount;
+
+        // تسجيل المشتريات
+        db.purchases.push({
+          id: Date.now(),
+          supplierId: supplierId,
+          supplierName: supplier.name,
+          amount: amount,
+          notes: notes,
+          date: new Date().toISOString(),
+        });
+
+        saveData();
+        if (db.googleSheetURL) syncToGoogleSheets(true);
+        closeModal("purchaseModal");
+        alert(
+          `✅ تم تسجيل مشتريات بقيمة ${amount.toFixed(2)} ${CURRENCY} من ${supplier.name}`,
+        );
+        loadPage(3);
+      }
+
+      // ====================== ✅ التقارير المفصلة - للمدير فقط ======================
       function loadReports(container) {
-        // قفل الصفحة للمدير فقط
+        // قفل للمدير فقط
         if (db.currentUser.type !== "manager") {
           container.innerHTML = `
-      <div class="text-center py-20">
-        <i class="fa-solid fa-lock text-6xl text-gray-300 mb-4"></i>
-        <h2 class="text-2xl font-bold text-gray-600">التقارير متاحة للمدير فقط</h2>
+      <div class="text-center py-10 sm:py-20">
+        <i class="fa-solid fa-lock text-4xl sm:text-6xl text-gray-300 mb-4"></i>
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-600">التقارير متاحة للمدير فقط</h2>
+        <p class="text-gray-500 mt-2">يرجى تسجيل الدخول كمدير لعرض التقارير</p>
       </div>
     `;
           return;
         }
 
-        // حسابات التقارير
+        // ===== حسابات التقارير =====
         const totalSales = db.sales.reduce((sum, s) => sum + s.total, 0);
         const totalCost = db.sales.reduce((sum, s) => {
           return (
@@ -1205,6 +1705,10 @@
         }, 0);
         const profit = totalSales - totalCost;
         const totalDebts = db.debts.reduce((sum, d) => sum + d.remaining, 0);
+        const totalPurchases = db.suppliers.reduce(
+          (sum, s) => sum + (s.totalPurchases || 0),
+          0,
+        );
 
         // مبيعات اليوم
         const today = new Date().toLocaleDateString("ar-DZ");
@@ -1213,16 +1717,18 @@
         );
         const todayTotal = todaySales.reduce((sum, s) => sum + s.total, 0);
 
-        // أفضل المنتجات
+        // أفضل 5 منتجات
         const productSales = {};
         db.sales.forEach((sale) => {
           sale.items.forEach((item) => {
-            if (!productSales[item.name]) productSales[item.name] = 0;
-            productSales[item.name] += item.qty;
+            if (!productSales[item.name])
+              productSales[item.name] = { qty: 0, total: 0 };
+            productSales[item.name].qty += item.qty;
+            productSales[item.name].total += item.retail * item.qty;
           });
         });
         const topProducts = Object.entries(productSales)
-          .sort((a, b) => b[1] - a[1])
+          .sort((a, b) => b[1].qty - a[1].qty)
           .slice(0, 5);
 
         // نشاط العمال
@@ -1234,179 +1740,269 @@
           workerActivity[sale.cashier].total += sale.total;
         });
 
+        // المنتجات منخفضة المخزون
+        const lowStock = db.products.filter((p) => p.stock < 20);
+
         container.innerHTML = `
-    <h1 class="text-3xl font-bold mb-8 text-gray-800">📊 التقارير التفصيلية</h1>
+    <div class="mb-6 sm:mb-8">
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">📊 التقارير التفصيلية</h1>
+      <p class="text-gray-600 text-sm sm:text-base">لوحة التحكم والإحصائيات الكاملة</p>
+    </div>
     
-    <!-- الإحصائيات الرئيسية -->
-    <div class="grid grid-cols-4 gap-6 mb-8">
-      <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-3xl shadow-xl">
-        <div class="text-sm mb-2 opacity-90">إجمالي المبيعات</div>
-        <div class="text-3xl font-bold">${totalSales.toFixed(2)} ${CURRENCY}</div>
-        <div class="text-xs mt-2 opacity-75">${db.sales.length} فاتورة</div>
+    <!-- ===== بطاقات الإحصائيات الرئيسية ===== -->
+    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-6 mb-6 sm:mb-8">
+      <div class="stat-card" style="--tw-gradient-from: #10b981; --tw-gradient-to: #059669;">
+        <div class="text-xs sm:text-sm mb-1 opacity-90">إجمالي المبيعات</div>
+        <div class="text-xl sm:text-3xl font-bold">${totalSales.toFixed(0)}</div>
+        <div class="text-xs opacity-75 mt-1">${CURRENCY}</div>
       </div>
       
-      <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-3xl shadow-xl">
-        <div class="text-sm mb-2 opacity-90">صافي الأرباح</div>
-        <div class="text-3xl font-bold">${profit.toFixed(2)} ${CURRENCY}</div>
-        <div class="text-xs mt-2 opacity-75">هامش: ${totalSales > 0 ? ((profit / totalSales) * 100).toFixed(1) : 0}%</div>
+      <div class="stat-card" style="--tw-gradient-from: #3b82f6; --tw-gradient-to: #2563eb;">
+        <div class="text-xs sm:text-sm mb-1 opacity-90">صافي الأرباح</div>
+        <div class="text-xl sm:text-3xl font-bold">${profit.toFixed(0)}</div>
+        <div class="text-xs opacity-75 mt-1">هامش: ${totalSales > 0 ? ((profit / totalSales) * 100).toFixed(1) : 0}%</div>
       </div>
       
-      <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-3xl shadow-xl">
-        <div class="text-sm mb-2 opacity-90">مبيعات اليوم</div>
-        <div class="text-3xl font-bold">${todayTotal.toFixed(2)} ${CURRENCY}</div>
-        <div class="text-xs mt-2 opacity-75">${todaySales.length} فاتورة</div>
+      <div class="stat-card" style="--tw-gradient-from: #f59e0b; --tw-gradient-to: #d97706;">
+        <div class="text-xs sm:text-sm mb-1 opacity-90">مبيعات اليوم</div>
+        <div class="text-xl sm:text-3xl font-bold">${todayTotal.toFixed(0)}</div>
+        <div class="text-xs opacity-75 mt-1">${todaySales.length} فاتورة</div>
       </div>
       
-      <div class="bg-gradient-to-br from-red-500 to-red-600 text-white p-6 rounded-3xl shadow-xl">
-        <div class="text-sm mb-2 opacity-90">إجمالي الديون</div>
-        <div class="text-3xl font-bold">${totalDebts.toFixed(2)} ${CURRENCY}</div>
-        <div class="text-xs mt-2 opacity-75">${db.debts.length} دين</div>
+      <div class="stat-card" style="--tw-gradient-from: #ef4444; --tw-gradient-to: #dc2626;">
+        <div class="text-xs sm:text-sm mb-1 opacity-90">إجمالي الديون</div>
+        <div class="text-xl sm:text-3xl font-bold">${totalDebts.toFixed(0)}</div>
+        <div class="text-xs opacity-75 mt-1">${db.debts.length} دين</div>
+      </div>
+      
+      <div class="stat-card" style="--tw-gradient-from: #8b5cf6; --tw-gradient-to: #7c3aed;">
+        <div class="text-xs sm:text-sm mb-1 opacity-90">عدد الفواتير</div>
+        <div class="text-xl sm:text-3xl font-bold">${db.sales.length}</div>
+        <div class="text-xs opacity-75 mt-1">إجمالي</div>
       </div>
     </div>
     
-    <div class="grid grid-cols-2 gap-6 mb-8">
+    <!-- ===== الصف الثاني: التفاصيل ===== -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
       <!-- أفضل المنتجات -->
-      <div class="bg-white p-6 rounded-3xl shadow-lg">
-        <h3 class="font-bold text-xl mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-trophy text-yellow-500"></i> أفضل المنتجات مبيعاً
+      <div class="bg-white p-4 sm:p-6 rounded-3xl shadow-lg">
+        <h3 class="font-bold text-lg sm:text-xl mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-trophy text-yellow-500"></i> أفضل 5 منتجات مبيعاً
         </h3>
-        <div class="space-y-3">
-          ${topProducts
-            .map(
-              (p, i) => `
-            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
-              <div class="flex items-center gap-3">
-                <span class="bg-amber-100 text-amber-800 w-8 h-8 rounded-full flex items-center justify-center font-bold">${i + 1}</span>
-                <span class="font-semibold">${p[0]}</span>
-              </div>
-              <span class="text-green-600 font-bold">${p[1]} وحدة</span>
-            </div>
-          `,
-            )
-            .join("")}
-        </div>
-      </div>
-      
-      <!-- نشاط العمال -->
-      <div class="bg-white p-6 rounded-3xl shadow-lg">
-        <h3 class="font-bold text-xl mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-users text-blue-500"></i> نشاط العمال
-        </h3>
-        <div class="space-y-3">
-          ${Object.entries(workerActivity)
-            .map(
-              ([name, data]) => `
-            <div class="p-3 bg-gray-50 rounded-xl">
-              <div class="flex justify-between mb-2">
-                <span class="font-semibold">${name}</span>
-                <span class="text-blue-600 font-bold">${data.total.toFixed(2)} ${CURRENCY}</span>
-              </div>
-              <div class="text-xs text-gray-500">${data.count} فاتورة</div>
-            </div>
-          `,
-            )
-            .join("")}
-        </div>
-      </div>
-    </div>
-    
-    <!-- جدول آخر العمليات -->
-    <div class="bg-white rounded-3xl shadow-lg p-6">
-      <h3 class="font-bold text-xl mb-4">آخر 10 عمليات</h3>
-      <div class="overflow-x-auto">
-        <table class="w-full">
-          <thead class="bg-gray-100">
-            <tr>
-              <th class="p-3 text-right">رقم الفاتورة</th>
-              <th class="p-3 text-right">التاريخ</th>
-              <th class="p-3 text-right">الكاشير</th>
-              <th class="p-3 text-right">المبلغ</th>
-              <th class="p-3 text-right">المنتجات</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${db.sales
-              .slice(-10)
-              .reverse()
+        ${
+          topProducts.length === 0
+            ? `<p class="text-gray-400 text-center py-8">لا توجد مبيعات بعد</p>`
+            : `
+          <div class="space-y-3">
+            ${topProducts
               .map(
-                (sale) => `
-              <tr class="border-b hover:bg-gray-50">
-                <td class="p-3 font-bold">#${sale.id}</td>
-                <td class="p-3 text-sm text-gray-600">${new Date(sale.date).toLocaleString("ar-DZ")}</td>
-                <td class="p-3">${sale.cashier}</td>
-                <td class="p-3 font-bold text-green-600">${sale.total.toFixed(2)} ${CURRENCY}</td>
-                <td class="p-3 text-sm text-gray-500">${sale.items.length} منتج</td>
-              </tr>
+                (p, i) => `
+              <div class="flex justify-between items-center p-3 bg-gradient-to-r from-amber-50 to-white rounded-xl border border-amber-100">
+                <div class="flex items-center gap-3">
+                  <span class="bg-amber-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">${i + 1}</span>
+                  <div>
+                    <div class="font-semibold text-sm sm:text-base">${p[0]}</div>
+                    <div class="text-xs text-gray-500">${p[1].total.toFixed(0)} ${CURRENCY}</div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-green-600 font-bold text-lg">${p[1].qty}</div>
+                  <div class="text-xs text-gray-500">وحدة</div>
+                </div>
+              </div>
             `,
               )
               .join("")}
+          </div>
+        `
+        }
+      </div>
+      
+      <!-- نشاط العمال -->
+      <div class="bg-white p-4 sm:p-6 rounded-3xl shadow-lg">
+        <h3 class="font-bold text-lg sm:text-xl mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-users text-blue-500"></i> نشاط الموظفين
+        </h3>
+        ${
+          Object.keys(workerActivity).length === 0
+            ? `<p class="text-gray-400 text-center py-8">لا يوجد نشاط بعد</p>`
+            : `
+          <div class="space-y-3">
+            ${Object.entries(workerActivity)
+              .map(
+                ([name, data]) => `
+              <div class="p-4 bg-gradient-to-r from-blue-50 to-white rounded-xl border border-blue-100">
+                <div class="flex justify-between mb-2">
+                  <span class="font-semibold text-sm sm:text-base">${name}</span>
+                  <span class="text-blue-600 font-bold text-lg">${data.total.toFixed(0)} ${CURRENCY}</span>
+                </div>
+                <div class="flex justify-between text-xs sm:text-sm text-gray-500">
+                  <span>${data.count} فاتورة</span>
+                  <span>معدل: ${(data.total / data.count).toFixed(0)} ${CURRENCY}</span>
+                </div>
+              </div>
+            `,
+              )
+              .join("")}
+          </div>
+        `
+        }
+      </div>
+    </div>
+    
+    <!-- ===== تنبيهات المخزون ===== -->
+    ${
+      lowStock.length > 0
+        ? `
+      <div class="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 p-4 sm:p-6 rounded-3xl mb-6 sm:mb-8">
+        <h3 class="font-bold text-lg sm:text-xl mb-4 flex items-center gap-2 text-red-800">
+          <i class="fa-solid fa-exclamation-triangle"></i> تنبيه: منتجات منخفضة المخزون
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          ${lowStock
+            .map(
+              (p) => `
+            <div class="bg-white p-3 rounded-xl border-2 border-red-200">
+              <div class="font-semibold text-sm mb-1">${p.name}</div>
+              <div class="text-red-600 font-bold">المخزون: ${p.stock}</div>
+            </div>
+          `,
+            )
+            .join("")}
+        </div>
+      </div>
+    `
+        : ""
+    }
+    
+    <!-- ===== جدول آخر العمليات ===== -->
+    <div class="bg-white rounded-3xl shadow-lg p-4 sm:p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-lg sm:text-xl">📝 آخر 20 عملية</h3>
+        <button onclick="exportSalesReport()" class="bg-green-600 text-white px-4 py-2 rounded-xl text-sm hover:bg-green-700">
+          <i class="fa-solid fa-download"></i> تصدير
+        </button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs sm:text-sm">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="p-2 sm:p-3 text-right">#</th>
+              <th class="p-2 sm:p-3 text-right">التاريخ</th>
+              <th class="p-2 sm:p-3 text-right">الكاشير</th>
+              <th class="p-2 sm:p-3 text-right">المبلغ</th>
+              <th class="p-2 sm:p-3 text-right">المنتجات</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${
+              db.sales.length === 0
+                ? `
+              <tr><td colspan="5" class="text-center py-10 text-gray-400">لا توجد مبيعات بعد</td></tr>
+            `
+                : db.sales
+                    .slice(-20)
+                    .reverse()
+                    .map(
+                      (sale) => `
+              <tr class="border-b hover:bg-gray-50">
+                <td class="p-2 sm:p-3 font-bold text-blue-600">#${sale.id}</td>
+                <td class="p-2 sm:p-3 text-gray-600">${new Date(sale.date).toLocaleString("ar-DZ", { dateStyle: "short", timeStyle: "short" })}</td>
+                <td class="p-2 sm:p-3">${sale.cashier}</td>
+                <td class="p-2 sm:p-3 font-bold text-green-600">${sale.total.toFixed(2)} ${CURRENCY}</td>
+                <td class="p-2 sm:p-3 text-gray-500">${sale.items.length} منتج</td>
+              </tr>
+            `,
+                    )
+                    .join("")
+            }
           </tbody>
         </table>
+      </div>
+    </div>
+    
+    <!-- ===== معلومات إضافية ===== -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-6 sm:mt-8">
+      <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 sm:p-6 rounded-3xl border-2 border-purple-200">
+        <div class="text-purple-600 text-sm mb-2">إجمالي المشتريات من الموردين</div>
+        <div class="text-2xl sm:text-3xl font-bold text-purple-800">${totalPurchases.toFixed(0)} ${CURRENCY}</div>
+      </div>
+      
+      <div class="bg-gradient-to-br from-teal-50 to-teal-100 p-4 sm:p-6 rounded-3xl border-2 border-teal-200">
+        <div class="text-teal-600 text-sm mb-2">عدد المنتجات</div>
+        <div class="text-2xl sm:text-3xl font-bold text-teal-800">${db.products.length}</div>
+      </div>
+      
+      <div class="bg-gradient-to-br from-pink-50 to-pink-100 p-4 sm:p-6 rounded-3xl border-2 border-pink-200">
+        <div class="text-pink-600 text-sm mb-2">عدد الموظفين</div>
+        <div class="text-2xl sm:text-3xl font-bold text-pink-800">${db.workers.length + 1}</div>
+        <div class="text-xs text-pink-600 mt-1">+1 مدير</div>
       </div>
     </div>
   `;
       }
 
-      // ====================== Sync ======================
+      function exportSalesReport() {
+        const csv =
+          "رقم الفاتورة,التاريخ,الكاشير,المبلغ,عدد المنتجات\n" +
+          db.sales
+            .map(
+              (s) =>
+                `${s.id},${new Date(s.date).toLocaleDateString("ar-DZ")},${s.cashier},${s.total},${s.items.length}`,
+            )
+            .join("\n");
+
+        const blob = new Blob(["\ufeff" + csv], {
+          type: "text/csv;charset=utf-8;",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `sales_report_${new Date().toISOString().slice(0, 10)}.csv`;
+        a.click();
+        alert("✅ تم تصدير التقرير");
+      }
+
+      // ====================== Sync - مختصر ======================
       function loadSync(container) {
         const lastSync = db.lastSyncTime
           ? new Date(db.lastSyncTime).toLocaleString("ar-DZ")
-          : "لم تتم بعد";
+          : "لم تتم";
         const isConfigured = db.googleSheetURL ? true : false;
 
         container.innerHTML = `
-    <h1 class="text-3xl font-bold mb-8">🔄 المزامنة مع Google Sheets</h1>
-    
+    <h1 class="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">🔄 المزامنة</h1>
     ${
       !isConfigured
         ? `
-      <div class="bg-amber-100 border-2 border-amber-300 rounded-3xl p-8 mb-8">
-        <h2 class="text-2xl font-bold text-amber-900 mb-4">⚠️ المزامنة غير مُعدة</h2>
-        <p class="mb-4">قم بإعداد رابط Google Apps Script من لوحة المدير</p>
-        <button onclick="loadPage(6)" class="bg-amber-700 text-white px-8 py-4 rounded-2xl font-bold">إعداد الآن</button>
+      <div class="bg-amber-100 border-2 border-amber-300 rounded-3xl p-4 sm:p-8 mb-6 sm:mb-8">
+        <h2 class="text-xl sm:text-2xl font-bold text-amber-900 mb-4">⚠️ المزامنة غير مُعدة</h2>
+        <button onclick="loadPage(6)" class="bg-amber-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold text-sm sm:text-base">إعداد الآن</button>
       </div>
     `
         : `
-      <div class="grid grid-cols-2 gap-8">
-        <div class="bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-3xl border-2 border-green-200">
-          <div class="flex items-center gap-4 mb-6">
-            <i class="fa-brands fa-google text-5xl text-green-600"></i>
-            <div>
-              <h2 class="text-2xl font-bold text-green-800">Google Sheets</h2>
-              <p class="text-sm text-green-600">متصل ✓</p>
-            </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
+        <div class="bg-gradient-to-br from-green-50 to-green-100 p-4 sm:p-8 rounded-3xl border-2 border-green-200">
+          <div class="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+            <i class="fa-brands fa-google text-3xl sm:text-5xl text-green-600"></i>
+            <div><h2 class="text-lg sm:text-2xl font-bold text-green-800">Google Sheets</h2><p class="text-xs sm:text-sm text-green-600">متصل ✓</p></div>
           </div>
-          
-          <div class="bg-white p-4 rounded-2xl mb-4">
-            <div class="text-sm text-gray-600">آخر مزامنة:</div>
-            <div class="font-bold">${lastSync}</div>
-          </div>
-          
-          <div class="space-y-3">
-            <button onclick="syncToGoogleSheets()" class="w-full py-4 bg-green-600 text-white rounded-2xl font-bold">☁️ مزامنة الآن</button>
-            <label class="flex items-center gap-3 p-4 bg-white rounded-2xl cursor-pointer border-2 ${db.autoSyncEnabled ? "border-green-500" : ""}">
-              <input type="checkbox" ${db.autoSyncEnabled ? "checked" : ""} onchange="toggleAutoSync(this.checked)" class="w-5 h-5"/>
-              <span class="font-semibold">مزامنة تلقائية (كل 5 دقائق)</span>
+          <div class="bg-white p-3 sm:p-4 rounded-2xl mb-3 sm:mb-4"><div class="text-xs sm:text-sm text-gray-600">آخر مزامنة:</div><div class="font-bold text-sm sm:text-base">${lastSync}</div></div>
+          <div class="space-y-2 sm:space-y-3">
+            <button onclick="syncToGoogleSheets()" class="w-full py-3 sm:py-4 bg-green-600 text-white rounded-2xl font-bold text-sm sm:text-base">☁️ مزامنة الآن</button>
+            <label class="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-2xl cursor-pointer border-2 ${db.autoSyncEnabled ? "border-green-500" : ""} text-xs sm:text-sm">
+              <input type="checkbox" ${db.autoSyncEnabled ? "checked" : ""} onchange="toggleAutoSync(this.checked)" class="w-4 h-4 sm:w-5 sm:h-5"/><span class="font-semibold">مزامنة تلقائية (5 دقائق)</span>
             </label>
           </div>
           <div id="syncStatus"></div>
         </div>
-        
-        <div class="bg-white p-8 rounded-3xl shadow-lg">
-          <h3 class="text-xl font-bold mb-4">📊 إحصائيات</h3>
-          <div class="space-y-3 text-sm">
-            <div class="flex justify-between p-3 bg-gray-50 rounded-xl">
-              <span>المنتجات:</span><strong>${db.products.length}</strong>
-            </div>
-            <div class="flex justify-between p-3 bg-gray-50 rounded-xl">
-              <span>المبيعات:</span><strong>${db.sales.length}</strong>
-            </div>
-            <div class="flex justify-between p-3 bg-gray-50 rounded-xl">
-              <span>الديون:</span><strong>${db.debts.length}</strong>
-            </div>
-            <div class="flex justify-between p-3 bg-gray-50 rounded-xl">
-              <span>الموظفين:</span><strong>${db.workers.length}</strong>
-            </div>
+        <div class="bg-white p-4 sm:p-8 rounded-3xl shadow-lg">
+          <h3 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4">📊 الإحصائيات</h3>
+          <div class="space-y-2 sm:space-y-3 text-xs sm:text-sm">
+            <div class="flex justify-between p-2 sm:p-3 bg-gray-50 rounded-xl"><span>المنتجات:</span><strong>${db.products.length}</strong></div>
+            <div class="flex justify-between p-2 sm:p-3 bg-gray-50 rounded-xl"><span>المبيعات:</span><strong>${db.sales.length}</strong></div>
+            <div class="flex justify-between p-2 sm:p-3 bg-gray-50 rounded-xl"><span>الموظفين:</span><strong>${db.workers.length}</strong></div>
+            <div class="flex justify-between p-2 sm:p-3 bg-gray-50 rounded-xl"><span>الموردين:</span><strong>${db.suppliers.length}</strong></div>
           </div>
         </div>
       </div>
@@ -1417,14 +2013,12 @@
 
       async function syncToGoogleSheets(silent = false) {
         if (!db.googleSheetURL) {
-          if (!silent) alert("لم يتم إعداد رابط المزامنة");
+          if (!silent) alert("لم يتم إعداد الرابط");
           return;
         }
-
         const statusEl = document.getElementById("syncStatus");
         if (statusEl)
           statusEl.innerHTML = `<div class="sync-loading mt-4">🔄 جاري المزامنة...</div>`;
-
         try {
           const data = {
             action: "sync",
@@ -1433,36 +2027,30 @@
             sales: db.sales,
             debts: db.debts,
             suppliers: db.suppliers,
-            workers: db.workers, // ✅ إضافة الموظفين
+            workers: db.workers,
+            purchases: db.purchases,
             timestamp: new Date().toISOString(),
           };
-
           const response = await fetch(db.googleSheetURL, {
             method: "POST",
             headers: { "Content-Type": "text/plain" },
             body: JSON.stringify(data),
           });
-
           const result = await response.json();
-
           if (result.status === "success") {
             db.lastSyncTime = new Date().toISOString();
             saveData();
-
-            if (statusEl) {
-              statusEl.innerHTML = `<div class="sync-success mt-4">✅ تمت المزامنة بنجاح<br><small>المنتجات: ${result.productsCount} | المبيعات: ${result.salesCount} | الموظفين: ${result.workersCount}</small></div>`;
-            }
-
-            if (!silent) alert("✅ تمت المزامنة بنجاح!");
+            if (statusEl)
+              statusEl.innerHTML = `<div class="sync-success mt-4">✅ تمت المزامنة</div>`;
+            if (!silent) alert("✅ تمت المزامنة!");
             updateSyncIndicator();
           } else {
             throw new Error(result.message || "فشلت المزامنة");
           }
         } catch (error) {
-          if (statusEl) {
-            statusEl.innerHTML = `<div class="sync-error mt-4">❌ فشلت المزامنة<br><small>${error.message}</small></div>`;
-          }
-          if (!silent) alert(`❌ فشلت المزامنة\n\n${error.message}`);
+          if (statusEl)
+            statusEl.innerHTML = `<div class="sync-error mt-4">❌ فشلت المزامنة</div>`;
+          if (!silent) alert(`❌ فشلت المزامنة`);
         }
       }
 
@@ -1471,23 +2059,20 @@
         saveData();
         if (enabled) {
           startAutoSync();
-          alert("✅ تم تفعيل المزامنة التلقائية");
+          alert("✅ مزامنة تلقائية مفعّلة");
         } else {
           stopAutoSync();
-          alert("⏸️ تم إيقاف المزامنة التلقائية");
+          alert("⏸️ مزامنة تلقائية موقفة");
         }
       }
 
       function startAutoSync() {
         stopAutoSync();
-        if (db.googleSheetURL) {
+        if (db.googleSheetURL)
           syncInterval = setInterval(
-            () => {
-              syncToGoogleSheets(true);
-            },
+            () => syncToGoogleSheets(true),
             5 * 60 * 1000,
           );
-        }
         updateSyncIndicator();
       }
 
@@ -1501,66 +2086,69 @@
       function updateSyncIndicator() {
         const indicator = document.getElementById("syncIndicator");
         if (!indicator) return;
-        if (db.autoSyncEnabled) {
-          indicator.innerHTML = `🔄 مزامنة تلقائية`;
-        } else if (db.lastSyncTime) {
+        if (db.autoSyncEnabled) indicator.innerHTML = `🔄 تلقائي`;
+        else if (db.lastSyncTime) {
           const minutes = Math.floor(
             (Date.now() - new Date(db.lastSyncTime)) / 60000,
           );
-          indicator.innerHTML = `آخر مزامنة: ${minutes}د`;
+          indicator.innerHTML = `${minutes}د`;
         }
       }
 
-      // ====================== Manager ======================
+      // ====================== Manager - مختصر ======================
       function loadManager(container) {
         if (db.currentUser.type !== "manager") {
-          container.innerHTML = `<div class="text-center py-20"><i class="fa-solid fa-lock text-6xl text-gray-300 mb-4"></i><h2 class="text-2xl font-bold text-gray-600">مخصص للمدير فقط</h2></div>`;
+          container.innerHTML = `<div class="text-center py-10 sm:py-20"><i class="fa-solid fa-lock text-4xl sm:text-6xl text-gray-300 mb-4"></i><h2 class="text-xl sm:text-2xl font-bold text-gray-600">للمدير فقط</h2></div>`;
           return;
         }
 
         container.innerHTML = `
-    <h1 class="text-3xl font-bold mb-6">👨‍💼 لوحة المدير</h1>
-    <div class="grid grid-cols-2 gap-6">
-      <div class="bg-white p-6 rounded-3xl shadow-lg">
-        <h3 class="font-bold text-xl mb-4">⚙️ الإعدادات</h3>
-        <button onclick="changeShopName()" class="w-full mb-3 py-3 bg-blue-100 text-blue-700 rounded-xl">تغيير اسم المتجر</button>
-        <button onclick="changeAdminPin()" class="w-full mb-3 py-3 bg-red-100 text-red-700 rounded-xl">تغيير كود المدير</button>
-        <button onclick="changeGoogleURL()" class="w-full mb-3 py-3 bg-green-100 text-green-700 rounded-xl">تحديث رابط Google</button>
+    <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">👨‍💼 لوحة المدير</h1>
+    ${
+      db.googleSheetURL
+        ? `
+      <div class="setup-link-box mb-4 sm:mb-6">
+        <div class="font-bold mb-2 text-sm sm:text-base">🔗 رابط الإعداد السريع:</div>
+        <button onclick="generateSetupLink()" class="w-full bg-white text-amber-900 py-2 sm:py-3 rounded-xl font-bold text-sm sm:text-base">📋 نسخ رابط الإعداد السريع</button>
+        <p class="text-xs mt-2 opacity-75">شارك مع الأجهزة الأخرى</p>
       </div>
-      
-      <div class="bg-white p-6 rounded-3xl shadow-lg">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="font-bold text-xl">👥 الموظفين</h3>
-          <button onclick="openWorkerModal()" class="bg-green-600 text-white px-4 py-2 rounded-xl text-sm">➕ إضافة</button>
+    `
+        : ""
+    }
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+      <div class="bg-white p-4 sm:p-6 rounded-3xl shadow-lg">
+        <h3 class="font-bold text-lg sm:text-xl mb-3 sm:mb-4">⚙️ الإعدادات</h3>
+        <button onclick="changeShopName()" class="w-full mb-2 sm:mb-3 py-2 sm:py-3 bg-blue-100 text-blue-700 rounded-xl text-sm sm:text-base">تغيير اسم المتجر</button>
+        <button onclick="changeAdminPin()" class="w-full mb-2 sm:mb-3 py-2 sm:py-3 bg-red-100 text-red-700 rounded-xl text-sm sm:text-base">تغيير كود المدير</button>
+        <button onclick="changeGoogleURL()" class="w-full py-2 sm:py-3 bg-green-100 text-green-700 rounded-xl text-sm sm:text-base">تحديث رابط Google</button>
+      </div>
+      <div class="bg-white p-4 sm:p-6 rounded-3xl shadow-lg">
+        <div class="flex justify-between items-center mb-3 sm:mb-4">
+          <h3 class="font-bold text-lg sm:text-xl">👥 الموظفين</h3>
+          <button onclick="openWorkerModal()" class="bg-green-600 text-white px-3 sm:px-4 py-1 sm:py-2 rounded-xl text-xs sm:text-sm">➕</button>
         </div>
-        <div id="workersList" class="space-y-2 max-h-96 overflow-auto"></div>
+        <div id="workersList" class="space-y-2 max-h-64 sm:max-h-96 overflow-auto"></div>
       </div>
     </div>
   `;
-
         renderWorkersList();
       }
 
       function renderWorkersList() {
         const container = document.getElementById("workersList");
         if (!container) return;
-
         if (db.workers.length === 0) {
-          container.innerHTML = `<p class="text-gray-400 text-center py-4">لا يوجد موظفين</p>`;
+          container.innerHTML = `<p class="text-gray-400 text-center py-4 text-xs sm:text-sm">لا يوجد موظفين</p>`;
           return;
         }
-
         container.innerHTML = db.workers
           .map(
             (w, i) => `
-    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
-      <div>
-        <div class="font-semibold">${w.name}</div>
-        <div class="text-xs text-gray-500">كود: ${w.pin} ${w.phone ? `| ${w.phone}` : ""}</div>
-      </div>
-      <div class="flex gap-2">
-        <button onclick="editWorker(${i})" class="text-blue-600 text-sm px-3 py-1 border border-blue-200 rounded-lg">تعديل</button>
-        <button onclick="removeWorker(${i})" class="text-red-600 text-sm px-3 py-1 border border-red-200 rounded-lg">حذف</button>
+    <div class="flex justify-between items-center p-2 sm:p-3 bg-gray-50 rounded-xl text-xs sm:text-sm">
+      <div class="flex-1 min-w-0"><div class="font-semibold truncate">${w.name}</div><div class="text-xs text-gray-500">كود: ${w.pin}</div></div>
+      <div class="flex gap-1 sm:gap-2 ml-2">
+        <button onclick="editWorker(${i})" class="text-blue-600 px-2 sm:px-3 py-1 border border-blue-200 rounded-lg text-xs">تعديل</button>
+        <button onclick="removeWorker(${i})" class="text-red-600 px-2 sm:px-3 py-1 border border-red-200 rounded-lg text-xs">حذف</button>
       </div>
     </div>
   `,
@@ -1570,22 +2158,18 @@
 
       function openWorkerModal(index = null) {
         const modal = document.getElementById("workerModal");
-
         if (index !== null) {
           const w = db.workers[index];
-          document.getElementById("modalWorkerTitle").textContent =
-            "تعديل موظف";
+          document.getElementById("modalWorkerTitle").textContent = "تعديل";
           document.getElementById("workerId").value = index;
           document.getElementById("workerName").value = w.name;
           document.getElementById("workerPhone").value = w.phone || "";
           document.getElementById("workerPin").value = w.pin;
         } else {
-          document.getElementById("modalWorkerTitle").textContent =
-            "إضافة موظف";
+          document.getElementById("modalWorkerTitle").textContent = "إضافة";
           document.getElementById("workerForm").reset();
           document.getElementById("workerId").value = "";
         }
-
         modal.style.display = "block";
       }
 
@@ -1599,13 +2183,8 @@
           pin: document.getElementById("workerPin").value,
           role: "عامل",
         };
-
-        if (index !== "") {
-          db.workers[index] = newWorker;
-        } else {
-          db.workers.push(newWorker);
-        }
-
+        if (index !== "") db.workers[index] = newWorker;
+        else db.workers.push(newWorker);
         saveData();
         if (db.googleSheetURL) syncToGoogleSheets(true);
         closeModal("workerModal");
@@ -1615,41 +2194,37 @@
       function editWorker(index) {
         openWorkerModal(index);
       }
-
       function removeWorker(index) {
-        if (confirm(`حذف الموظف ${db.workers[index].name}؟`)) {
+        if (confirm(`حذف ${db.workers[index].name}؟`)) {
           db.workers.splice(index, 1);
           saveData();
           if (db.googleSheetURL) syncToGoogleSheets(true);
           loadPage(6);
         }
       }
-
       function changeShopName() {
-        const newName = prompt("اسم المتجر الجديد:", db.shopName);
+        const newName = prompt("اسم المتجر:", db.shopName);
         if (newName) {
           db.shopName = newName;
           saveData();
-          alert("✅ تم التغيير");
+          alert("✅ تم");
           loadPage(6);
         }
       }
-
       function changeAdminPin() {
-        const newPin = prompt("كود المدير الجديد:");
+        const newPin = prompt("كود جديد:");
         if (newPin && newPin.length >= 4) {
           db.manager.pin = newPin;
           saveData();
-          alert("✅ تم التغيير");
+          alert("✅ تم");
         }
       }
-
       function changeGoogleURL() {
-        const newURL = prompt("رابط Google Apps Script:", db.googleSheetURL);
+        const newURL = prompt("رابط Google:", db.googleSheetURL);
         if (newURL && newURL.startsWith("https://script.google.com")) {
           db.googleSheetURL = newURL;
           saveData();
-          alert("✅ تم التحديث");
+          alert("✅ تم");
           loadPage(6);
         }
       }
@@ -1666,6 +2241,9 @@
           event.target.style.display = "none";
       };
       setInterval(updateSyncIndicator, 60000);
+      document.addEventListener("gesturestart", function (e) {
+        e.preventDefault();
+      });
     </script>
   </body>
 </html>
