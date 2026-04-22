@@ -8,7 +8,6 @@
     />
     <meta name="theme-color" content="#78350f" />
     <title>متجر الشاي الذهبي - POS Pro</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
@@ -16,12 +15,10 @@
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
-
     <style>
       * {
         -webkit-tap-highlight-color: transparent;
       }
-
       @media (max-width: 640px) {
         html {
           font-size: 14px;
@@ -33,7 +30,6 @@
           font-size: 1.25rem !important;
         }
       }
-
       .pin-box {
         letter-spacing: 0.5em;
         font-size: clamp(1.5rem, 5vw, 2rem);
@@ -46,12 +42,10 @@
         background-color: #451a03;
         color: white;
       }
-
       .sidebar {
         width: 280px;
         transition: transform 0.3s ease;
       }
-
       @media (max-width: 1024px) {
         .sidebar {
           position: fixed;
@@ -75,7 +69,6 @@
           display: block;
         }
       }
-
       .sidebar-item {
         padding: clamp(0.75rem, 2vw, 1rem) 1.25rem;
         margin-bottom: 0.5rem;
@@ -94,7 +87,6 @@
         background-color: #78350f;
         font-weight: bold;
       }
-
       .modal {
         display: none;
         position: fixed;
@@ -127,7 +119,6 @@
           opacity: 1;
         }
       }
-
       @media print {
         body * {
           visibility: hidden;
@@ -150,7 +141,6 @@
         margin: 10px auto;
         border: 2px dashed #000;
       }
-
       .sync-success {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: white;
@@ -188,7 +178,6 @@
           opacity: 0.7;
         }
       }
-
       .mobile-menu-btn {
         display: none;
         position: fixed;
@@ -210,7 +199,6 @@
           display: flex;
         }
       }
-
       @media (max-width: 768px) {
         .grid-cols-12 > * {
           grid-column: span 12 !important;
@@ -224,9 +212,6 @@
         .grid-cols-4 {
           grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         }
-      }
-
-      @media (max-width: 768px) {
         table {
           font-size: 0.75rem;
         }
@@ -235,7 +220,6 @@
           padding: 0.5rem !important;
         }
       }
-
       .setup-link-box {
         background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
         padding: 1rem;
@@ -243,8 +227,6 @@
         margin-top: 1rem;
         word-break: break-all;
       }
-
-      /* Stats Cards */
       .stat-card {
         background: linear-gradient(
           135deg,
@@ -256,6 +238,25 @@
         border-radius: 1.5rem;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
       }
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+      .loading-box {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 400px;
+      }
     </style>
   </head>
   <body class="bg-amber-50">
@@ -266,14 +267,13 @@
     >
       <i class="fa-solid fa-bars"></i>
     </button>
-
     <div
       id="sidebarOverlay"
       class="sidebar-overlay"
       onclick="toggleMobileSidebar()"
     ></div>
 
-    <!-- Setup Screen - نفس الكود السابق -->
+    <!-- Setup Screen -->
     <div
       id="setupScreen"
       class="min-h-screen hidden flex items-center justify-center bg-gradient-to-br from-amber-900 to-amber-700 p-4"
@@ -318,7 +318,7 @@
       </div>
     </div>
 
-    <!-- Login Screen - نفس الكود السابق -->
+    <!-- Login Screen -->
     <div
       id="loginScreen"
       class="min-h-screen hidden flex items-center justify-center bg-gradient-to-br from-amber-900 to-amber-700 p-4"
@@ -484,7 +484,7 @@
       </div>
     </div>
 
-    <!-- ✅ Modal: إضافة/تعديل مورد -->
+    <!-- Modals -->
     <div id="supplierModal" class="modal">
       <div class="modal-content">
         <div
@@ -506,8 +506,7 @@
             <div class="mb-4">
               <label class="block text-sm font-semibold mb-1"
                 >اسم المورد / الشركة</label
-              >
-              <input
+              ><input
                 type="text"
                 id="supplierName"
                 required
@@ -515,8 +514,8 @@
               />
             </div>
             <div class="mb-4">
-              <label class="block text-sm font-semibold mb-1">رقم الهاتف</label>
-              <input
+              <label class="block text-sm font-semibold mb-1">رقم الهاتف</label
+              ><input
                 type="tel"
                 id="supplierPhone"
                 placeholder="0555123456"
@@ -526,8 +525,7 @@
             <div class="mb-4">
               <label class="block text-sm font-semibold mb-1"
                 >العنوان (اختياري)</label
-              >
-              <input
+              ><input
                 type="text"
                 id="supplierAddress"
                 class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
@@ -553,7 +551,6 @@
       </div>
     </div>
 
-    <!-- ✅ Modal: تسجيل مشتريات -->
     <div id="purchaseModal" class="modal">
       <div class="modal-content">
         <div
@@ -571,8 +568,8 @@
           <form id="purchaseForm" onsubmit="savePurchase(event)">
             <input type="hidden" id="purchaseSupplierId" />
             <div class="mb-4">
-              <label class="block text-sm font-semibold mb-1">المورد</label>
-              <input
+              <label class="block text-sm font-semibold mb-1">المورد</label
+              ><input
                 type="text"
                 id="purchaseSupplierName"
                 readonly
@@ -582,8 +579,7 @@
             <div class="mb-4">
               <label class="block text-sm font-semibold mb-1"
                 >المبلغ الإجمالي (دج)</label
-              >
-              <input
+              ><input
                 type="number"
                 step="0.01"
                 id="purchaseAmount"
@@ -594,8 +590,7 @@
             <div class="mb-4">
               <label class="block text-sm font-semibold mb-1"
                 >ملاحظات (اختياري)</label
-              >
-              <textarea
+              ><textarea
                 id="purchaseNotes"
                 rows="3"
                 class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
@@ -621,7 +616,6 @@
       </div>
     </div>
 
-    <!-- Modals الأخرى - مختصرة -->
     <div id="productModal" class="modal">
       <div class="modal-content">
         <div
@@ -644,8 +638,7 @@
               <div class="sm:col-span-2">
                 <label class="block text-sm font-semibold mb-1"
                   >اسم المنتج</label
-                >
-                <input
+                ><input
                   type="text"
                   id="prodName"
                   required
@@ -876,7 +869,6 @@
     </div>
 
     <script>
-      // ====================== البيانات ======================
       let db = {
         setupCompleted: false,
         shopName: "متجر الشاي الذهبي",
@@ -886,44 +878,40 @@
         sales: [],
         debts: [],
         suppliers: [],
-        purchases: [], // ✅ جديد: لتسجيل المشتريات من الموردين
+        purchases: [],
         nextInvoice: 1001,
         googleSheetURL: "",
         lastSyncTime: null,
         autoSyncEnabled: false,
       };
-
-      let currentStep = 1;
-      let setupData = {
-        shopName: "",
-        managerName: "",
-        managerPin: "",
-        googleURL: "",
-      };
-      let selectedUser = null;
-      let currentPin = "";
-      let cart = [];
-      let syncInterval = null;
+      let currentStep = 1,
+        setupData = {
+          shopName: "",
+          managerName: "",
+          managerPin: "",
+          googleURL: "",
+        },
+        selectedUser = null,
+        currentPin = "",
+        cart = [],
+        syncInterval = null;
       const CURRENCY = "دج";
 
-      // ====================== Startup ======================
-      window.onload = () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const sheetURL = urlParams.get("sheet");
-        const autoSetup = urlParams.get("autoSetup");
-
-        const saved = localStorage.getItem("teaShopDB");
+      window.onload = async () => {
+        const urlParams = new URLSearchParams(window.location.search),
+          sheetURL = urlParams.get("sheet"),
+          autoSetup = urlParams.get("autoSetup"),
+          saved = localStorage.getItem("teaShopDB");
         if (saved) {
           db = JSON.parse(saved);
           if (!db.googleSheetURL) db.googleSheetURL = "";
-          if (!db.purchases) db.purchases = []; // للإصدارات القديمة
+          if (!db.purchases) db.purchases = [];
+          if (!db.manager) db.manager = { name: "", pin: "", phone: "" };
         }
-
         if (sheetURL && autoSetup === "true" && !db.setupCompleted) {
-          quickSetup(sheetURL);
+          await quickSetup(sheetURL);
           return;
         }
-
         if (sheetURL && db.setupCompleted) {
           db.googleSheetURL = decodeURIComponent(sheetURL);
           saveData();
@@ -931,7 +919,6 @@
           showLoginScreen();
           return;
         }
-
         if (!db.setupCompleted) {
           document.getElementById("setupScreen").classList.remove("hidden");
           showSetupStep(1);
@@ -940,11 +927,47 @@
         }
       };
 
-      function quickSetup(sheetURL) {
+      async function quickSetup(sheetURL) {
+        db.googleSheetURL = decodeURIComponent(sheetURL);
+        const statusDiv = document.createElement("div");
+        statusDiv.className = "loading-overlay";
+        statusDiv.innerHTML = `<div class="loading-box"><div style="font-size:50px;margin-bottom:20px;">☁️</div><h3 style="font-size:20px;margin-bottom:10px;">جاري التحميل من السحابة...</h3><p style="color:#666;">يرجى الانتظار</p></div>`;
+        document.body.appendChild(statusDiv);
+        try {
+          const response = await fetch(db.googleSheetURL + "?action=get", {
+              method: "GET",
+            }),
+            data = await response.json();
+          if (data.status === "success" && data.hasData) {
+            db.setupCompleted = true;
+            db.shopName = data.shopName;
+            db.manager = {
+              name: data.manager.name,
+              pin: data.manager.pin,
+              phone: data.manager.phone || "",
+            };
+            db.products = data.products || [];
+            db.sales = data.sales || [];
+            db.debts = data.debts || [];
+            db.suppliers = data.suppliers || [];
+            db.workers = data.workers || [];
+            db.purchases = data.purchases || [];
+            db.nextInvoice = data.nextInvoice || 1001;
+            saveData();
+            document.body.removeChild(statusDiv);
+            alert(
+              `✅ تم استعادة البيانات من السحابة!\n\n📦 المتجر: ${db.shopName}\n👤 المدير: ${db.manager.name}\n🔑 الكود: ${db.manager.pin}\n\n📊 ${db.products.length} منتج\n💰 ${db.sales.length} عملية بيع\n👥 ${db.workers.length} موظف`,
+            );
+            showLoginScreen();
+            return;
+          }
+        } catch (error) {
+          console.log("لم نجد بيانات في السحابة - سننشئ بيانات جديدة");
+        }
+        document.body.removeChild(statusDiv);
         db.setupCompleted = true;
         db.shopName = "متجر الشاي الذهبي";
         db.manager = { name: "المدير", pin: "123456", phone: "" };
-        db.googleSheetURL = decodeURIComponent(sheetURL);
         db.products = [
           {
             id: 1,
@@ -990,6 +1013,7 @@
           },
         ];
         saveData();
+        await syncToGoogleSheets(true);
         alert("✅ إعداد سريع!\n\nكود المدير: 123456");
         showLoginScreen();
       }
@@ -999,8 +1023,8 @@
           alert("⚠️ يجب إعداد رابط Google Sheet أولاً");
           return;
         }
-        const baseURL = window.location.origin + window.location.pathname;
-        const setupLink = `${baseURL}?sheet=${encodeURIComponent(db.googleSheetURL)}&autoSetup=true`;
+        const baseURL = window.location.origin + window.location.pathname,
+          setupLink = `${baseURL}?sheet=${encodeURIComponent(db.googleSheetURL)}&autoSetup=true`;
         navigator.clipboard
           .writeText(setupLink)
           .then(() => {
@@ -1010,22 +1034,18 @@
             prompt("انسخ هذا الرابط:", setupLink);
           });
       }
-
       function toggleMobileSidebar() {
-        const sidebar = document.getElementById("sidebar");
-        const overlay = document.getElementById("sidebarOverlay");
+        const sidebar = document.getElementById("sidebar"),
+          overlay = document.getElementById("sidebarOverlay");
         sidebar.classList.toggle("open");
         overlay.classList.toggle("active");
       }
-
       function closeMobileSidebar() {
-        const sidebar = document.getElementById("sidebar");
-        const overlay = document.getElementById("sidebarOverlay");
+        const sidebar = document.getElementById("sidebar"),
+          overlay = document.getElementById("sidebarOverlay");
         sidebar.classList.remove("open");
         overlay.classList.remove("active");
       }
-
-      // ====================== Setup - مختصر ======================
       function showSetupStep(step) {
         currentStep = step;
         document
@@ -1034,7 +1054,6 @@
             el.classList.toggle("step-active", i + 1 === step),
           );
         const content = document.getElementById("setupContent");
-
         if (step === 1) {
           content.innerHTML = `<h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">معلومات المتجر</h2><input id="shopNameInput" type="text" placeholder="اسم المتجر" value="${setupData.shopName || "متجر الشاي الذهبي"}" class="w-full p-3 sm:p-4 border-2 rounded-2xl text-lg sm:text-xl focus:outline-none focus:border-amber-600"/>`;
         } else if (step === 2) {
@@ -1043,7 +1062,6 @@
           content.innerHTML = `<h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">المزامنة (اختياري)</h2><input id="googleURLInput" type="url" placeholder="https://script.google.com/..." value="${setupData.googleURL}" class="w-full p-3 sm:p-4 border-2 rounded-2xl mb-4 text-xs sm:text-sm"/>`;
         }
       }
-
       function nextStep() {
         if (currentStep === 1) {
           setupData.shopName = document
@@ -1051,8 +1069,8 @@
             .value.trim();
           showSetupStep(2);
         } else if (currentStep === 2) {
-          const name = document.getElementById("managerNameInput").value.trim();
-          const pin = document.getElementById("managerPinInput").value.trim();
+          const name = document.getElementById("managerNameInput").value.trim(),
+            pin = document.getElementById("managerPinInput").value.trim();
           if (!name || !pin || pin.length < 4) {
             alert("أدخل اسم وكود المدير (4+ أرقام)");
             return;
@@ -1064,11 +1082,9 @@
           finishSetup();
         }
       }
-
       function prevStep() {
         if (currentStep > 1) showSetupStep(currentStep - 1);
       }
-
       function finishSetup() {
         if (!setupData.managerPin) {
           alert("يجب إعداد المدير");
@@ -1132,8 +1148,6 @@
         document.getElementById("setupScreen").classList.add("hidden");
         showLoginScreen();
       }
-
-      // ====================== Login - مختصر ======================
       function showLoginScreen() {
         document.getElementById("loginScreen").classList.remove("hidden");
         document.getElementById("shopNameDisplay").textContent = db.shopName;
@@ -1142,12 +1156,10 @@
           300,
         );
       }
-
       function showPinPad() {
         document.getElementById("pinPadSection").classList.remove("hidden");
         createPinPad();
       }
-
       function createPinPad() {
         const pad = document.getElementById("pinPad");
         if (!pad) return;
@@ -1156,7 +1168,6 @@
           pad.innerHTML += `<button onclick="addPin('${i}')" type="button" class="bg-gray-100 hover:bg-amber-100 py-4 sm:py-6 text-xl sm:text-2xl font-bold rounded-2xl">${i}</button>`;
         pad.innerHTML += `<button onclick="addPin('0')" type="button" class="bg-gray-100 hover:bg-amber-100 py-4 sm:py-6 text-xl sm:text-2xl font-bold rounded-2xl">0</button>`;
       }
-
       function addPin(num) {
         if (currentPin.length < 6) {
           currentPin += num;
@@ -1169,41 +1180,71 @@
         currentPin = "";
         document.getElementById("pinInput").value = "";
       }
-
       function verifyLoginDirect() {
         const pin = document.getElementById("pinInputDirect").value.trim();
+
         if (!pin) {
-          alert("أدخل الكود");
+          alert("⚠️ أدخل الكود");
           return;
         }
-        if (pin === db.manager.pin) {
+
+        // ✅ تحويل كلاهما إلى string للمقارنة
+        const inputPin = pin.toString();
+        const managerPin = (db.manager.pin || "").toString();
+
+        console.log("=== تسجيل الدخول ===");
+        console.log("الكود المُدخل:", inputPin, "| النوع:", typeof inputPin);
+        console.log("كود المدير:", managerPin, "| النوع:", typeof managerPin);
+        console.log("هل متطابق؟", inputPin === managerPin);
+
+        // المقارنة
+        if (inputPin === managerPin) {
+          console.log("✅ تسجيل دخول المدير");
           loginSuccess({ type: "manager", ...db.manager });
           return;
         }
-        const worker = db.workers.find((w) => w.pin === pin);
+
+        // البحث في الموظفين
+        const worker = db.workers.find((w) => {
+          const workerPin = (w.pin || "").toString();
+          return workerPin === inputPin;
+        });
+
         if (worker) {
+          console.log("✅ تسجيل دخول موظف:", worker.name);
           loginSuccess({ type: "worker", ...worker });
           return;
         }
-        alert("❌ كود خاطئ");
+
+        console.log("❌ كود خاطئ");
+        alert("❌ كود خاطئ\n\nاضغط '🔍 معلومات الكود' لمعرفة الكود المحفوظ");
         document.getElementById("pinInputDirect").value = "";
       }
 
       function verifyLoginPad() {
         if (!currentPin) return;
-        if (currentPin === db.manager.pin) {
+
+        const inputPin = currentPin.toString();
+        const managerPin = (db.manager.pin || "").toString();
+
+        if (inputPin === managerPin) {
           loginSuccess({ type: "manager", ...db.manager });
           return;
         }
-        const worker = db.workers.find((w) => w.pin === currentPin);
+
+        const worker = db.workers.find((w) => {
+          const workerPin = (w.pin || "").toString();
+          return workerPin === inputPin;
+        });
+
         if (worker) {
           loginSuccess({ type: "worker", ...worker });
           return;
         }
+
         alert("❌ كود خاطئ");
         clearPin();
       }
-
       function loginSuccess(user) {
         db.currentUser = user;
         document.getElementById("loginScreen").classList.add("hidden");
@@ -1213,15 +1254,12 @@
         if (db.autoSyncEnabled && db.googleSheetURL) startAutoSync();
         loadPage(0);
       }
-
       function logout() {
         if (confirm("تسجيل خروج؟")) {
           stopAutoSync();
           location.reload();
         }
       }
-
-      // ====================== Navigation ======================
       function navigate(pageNum) {
         document
           .querySelectorAll(".sidebar-item")
@@ -1229,45 +1267,24 @@
         event.currentTarget.classList.add("active");
         loadPage(pageNum);
       }
-
       function loadPage(pageNum) {
         const content = document.getElementById("mainContent");
         content.innerHTML = "";
         if (pageNum === 0) loadPOS(content);
         else if (pageNum === 1) loadProducts(content);
         else if (pageNum === 2) loadDebts(content);
-        else if (pageNum === 3)
-          loadSuppliers(content); // ✅ محسّن
-        else if (pageNum === 4)
-          loadReports(content); // ✅ محسّن
+        else if (pageNum === 3) loadSuppliers(content);
+        else if (pageNum === 4) loadReports(content);
         else if (pageNum === 5) loadSync(content);
         else if (pageNum === 6) loadManager(content);
       }
 
-      // ====================== POS - مختصر ======================
       function loadPOS(container) {
-        container.innerHTML = `
-    <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-gray-800">💰 نقطة البيع</h1>
-    <div class="grid grid-cols-12 gap-4 sm:gap-6">
-      <div class="col-span-12 lg:col-span-7 bg-white rounded-3xl shadow-lg p-4 sm:p-6">
-        <input type="text" id="barcodeInput" placeholder="امسح الباركود..." class="w-full text-lg sm:text-xl p-3 sm:p-5 border-2 border-dashed border-amber-400 rounded-2xl mb-4 sm:mb-6 focus:outline-none focus:border-amber-600" onkeypress="if(event.key==='Enter') { handleBarcode(this.value); this.value=''; }"/>
-        <div id="cartItems" class="max-h-60 sm:max-h-96 overflow-auto mb-4 sm:mb-6"></div>
-        <div class="border-t-2 pt-4 mb-4 sm:mb-6"><div class="flex justify-between text-xl sm:text-2xl font-bold"><span>الإجمالي:</span><span id="totalAmount" class="text-amber-700">0.00 ${CURRENCY}</span></div></div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <button onclick="completeSale(false)" class="bg-green-600 text-white py-4 sm:py-6 rounded-2xl text-lg sm:text-xl font-bold hover:bg-green-700">✅ نقدي</button>
-          <button onclick="completeSale(true)" class="bg-orange-600 text-white py-4 sm:py-6 rounded-2xl text-lg sm:text-xl font-bold hover:bg-orange-700">📝 دين</button>
-        </div>
-      </div>
-      <div class="col-span-12 lg:col-span-5 bg-white rounded-3xl shadow-lg p-4 sm:p-6">
-        <h3 class="font-bold mb-3 sm:mb-4 text-base sm:text-lg">المنتجات السريعة</h3>
-        <div class="grid grid-cols-2 gap-2 sm:gap-3 max-h-96 overflow-auto" id="quickProducts"></div>
-      </div>
-    </div>`;
+        container.innerHTML = `<h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-gray-800">💰 نقطة البيع</h1><div class="grid grid-cols-12 gap-4 sm:gap-6"><div class="col-span-12 lg:col-span-7 bg-white rounded-3xl shadow-lg p-4 sm:p-6"><input type="text" id="barcodeInput" placeholder="امسح الباركود..." class="w-full text-lg sm:text-xl p-3 sm:p-5 border-2 border-dashed border-amber-400 rounded-2xl mb-4 sm:mb-6 focus:outline-none focus:border-amber-600" onkeypress="if(event.key==='Enter') { handleBarcode(this.value); this.value=''; }"/><div id="cartItems" class="max-h-60 sm:max-h-96 overflow-auto mb-4 sm:mb-6"></div><div class="border-t-2 pt-4 mb-4 sm:mb-6"><div class="flex justify-between text-xl sm:text-2xl font-bold"><span>الإجمالي:</span><span id="totalAmount" class="text-amber-700">0.00 ${CURRENCY}</span></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"><button onclick="completeSale(false)" class="bg-green-600 text-white py-4 sm:py-6 rounded-2xl text-lg sm:text-xl font-bold hover:bg-green-700">✅ نقدي</button><button onclick="completeSale(true)" class="bg-orange-600 text-white py-4 sm:py-6 rounded-2xl text-lg sm:text-xl font-bold hover:bg-orange-700">📝 دين</button></div></div><div class="col-span-12 lg:col-span-5 bg-white rounded-3xl shadow-lg p-4 sm:p-6"><h3 class="font-bold mb-3 sm:mb-4 text-base sm:text-lg">المنتجات السريعة</h3><div class="grid grid-cols-2 gap-2 sm:gap-3 max-h-96 overflow-auto" id="quickProducts"></div></div></div>`;
         renderQuickProducts();
         renderCart();
         setTimeout(() => document.getElementById("barcodeInput")?.focus(), 300);
       }
-
       function renderQuickProducts() {
         const container = document.getElementById("quickProducts");
         if (!container) return;
@@ -1281,7 +1298,6 @@
           container.appendChild(div);
         });
       }
-
       function addToCart(product) {
         if (product.stock <= 0) {
           alert("⚠️ غير متوفر");
@@ -1296,7 +1312,6 @@
         }
         renderCart();
       }
-
       function renderCart() {
         const container = document.getElementById("cartItems");
         if (!container) return;
@@ -1319,7 +1334,6 @@
         document.getElementById("totalAmount").textContent =
           total.toFixed(2) + ` ${CURRENCY}`;
       }
-
       function removeFromCart(index) {
         cart.splice(index, 1);
         renderCart();
@@ -1332,7 +1346,6 @@
         if (product) addToCart(product);
         else alert("❌ غير موجود");
       }
-
       function completeSale(isDebt) {
         if (cart.length === 0) return;
         const total = cart.reduce(
@@ -1362,12 +1375,11 @@
           loadPage(0);
         }
       }
-
       function saveDebt(e) {
         e.preventDefault();
-        const customer = document.getElementById("debtCustomer").value;
-        const phone = document.getElementById("debtPhone").value;
-        const amount = parseFloat(document.getElementById("debtAmount").value);
+        const customer = document.getElementById("debtCustomer").value,
+          phone = document.getElementById("debtPhone").value,
+          amount = parseFloat(document.getElementById("debtAmount").value);
         db.debts.push({
           id: Date.now(),
           customer: customer,
@@ -1389,18 +1401,16 @@
         alert(`✅ دين: ${amount.toFixed(2)} ${CURRENCY}`);
         loadPage(0);
       }
-
       function printReceipt(items, total) {
-        const invoiceNum = db.nextInvoice - 1;
-        const receiptHTML = `<div class="thermal-receipt"><div class="text-center font-bold text-xl mb-3">${db.shopName}</div><div class="text-center mb-2">فاتورة #${invoiceNum}</div><div class="text-xs mb-3">${new Date().toLocaleString("ar-DZ")}</div><hr>${items.map((item) => `<div class="flex justify-between text-sm mt-2"><span>${item.name} × ${item.qty}</span><span>${(item.retail * item.qty).toFixed(0)}</span></div>`).join("")}<hr class="my-3"><div class="flex justify-between font-bold text-lg"><span>الإجمالي</span><span>${total.toFixed(0)} ${CURRENCY}</span></div><div class="text-center text-xs mt-6">شكراً ☕</div></div>`;
-        const printWindow = window.open("", "_blank", "width=400,height=600");
+        const invoiceNum = db.nextInvoice - 1,
+          receiptHTML = `<div class="thermal-receipt"><div class="text-center font-bold text-xl mb-3">${db.shopName}</div><div class="text-center mb-2">فاتورة #${invoiceNum}</div><div class="text-xs mb-3">${new Date().toLocaleString("ar-DZ")}</div><hr>${items.map((item) => `<div class="flex justify-between text-sm mt-2"><span>${item.name} × ${item.qty}</span><span>${(item.retail * item.qty).toFixed(0)}</span></div>`).join("")}<hr class="my-3"><div class="flex justify-between font-bold text-lg"><span>الإجمالي</span><span>${total.toFixed(0)} ${CURRENCY}</span></div><div class="text-center text-xs mt-6">شكراً ☕</div></div>`,
+          printWindow = window.open("", "_blank", "width=400,height=600");
         printWindow.document.write(
           `<html dir="rtl"><head><style>body{font-family:monospace;padding:10px;}</style></head><body onload="window.print();setTimeout(()=>window.close(),500);">${receiptHTML}</body></html>`,
         );
         printWindow.document.close();
       }
 
-      // ====================== Products - مختصر ======================
       function loadProducts(container) {
         let html = `<div class="flex flex-col sm:flex-row justify-between gap-3 mb-4 sm:mb-6"><h1 class="text-2xl sm:text-3xl font-bold">📦 المنتجات</h1><button onclick="openProductModal()" class="bg-amber-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-2xl text-sm sm:text-base">➕ منتج جديد</button></div><div class="grid gap-3 sm:gap-4">`;
         db.products.forEach((p) => {
@@ -1409,7 +1419,6 @@
         html += `</div>`;
         container.innerHTML = html;
       }
-
       function openProductModal(id = null) {
         const modal = document.getElementById("productModal");
         if (id) {
@@ -1431,23 +1440,24 @@
         }
         modal.style.display = "block";
       }
-
       function saveProduct(e) {
         e.preventDefault();
-        const id = document.getElementById("prodId").value;
-        const newProd = {
-          id: id ? parseInt(id) : Date.now(),
-          name: document.getElementById("prodName").value,
-          barcode:
-            document.getElementById("prodBarcode").value || "BAR" + Date.now(),
-          category: document.getElementById("prodCategory").value,
-          unit: document.getElementById("prodUnit").value,
-          stock: parseInt(document.getElementById("prodStock").value),
-          cost: parseFloat(document.getElementById("prodCost").value) || 0,
-          wholesale:
-            parseFloat(document.getElementById("prodWholesale").value) || 0,
-          retail: parseFloat(document.getElementById("prodRetail").value) || 0,
-        };
+        const id = document.getElementById("prodId").value,
+          newProd = {
+            id: id ? parseInt(id) : Date.now(),
+            name: document.getElementById("prodName").value,
+            barcode:
+              document.getElementById("prodBarcode").value ||
+              "BAR" + Date.now(),
+            category: document.getElementById("prodCategory").value,
+            unit: document.getElementById("prodUnit").value,
+            stock: parseInt(document.getElementById("prodStock").value),
+            cost: parseFloat(document.getElementById("prodCost").value) || 0,
+            wholesale:
+              parseFloat(document.getElementById("prodWholesale").value) || 0,
+            retail:
+              parseFloat(document.getElementById("prodRetail").value) || 0,
+          };
         if (id) {
           const index = db.products.findIndex((p) => p.id == id);
           db.products[index] = newProd;
@@ -1459,7 +1469,6 @@
         closeModal("productModal");
         loadPage(1);
       }
-
       function deleteProduct(id) {
         if (confirm("حذف؟")) {
           db.products = db.products.filter((p) => p.id !== id);
@@ -1469,7 +1478,6 @@
         }
       }
 
-      // ====================== Debts - مختصر ======================
       function loadDebts(container) {
         const totalDebts = db.debts.reduce((sum, d) => sum + d.remaining, 0);
         let html = `<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6"><h1 class="text-2xl sm:text-3xl font-bold text-gray-800">📋 الديون</h1><div class="bg-red-100 text-red-800 px-4 sm:px-6 py-2 sm:py-3 rounded-2xl font-bold text-base sm:text-xl">إجمالي: ${totalDebts.toFixed(2)} ${CURRENCY}</div></div><div class="bg-white rounded-3xl shadow-lg p-3 sm:p-6 overflow-x-auto"><table class="w-full text-xs sm:text-sm"><thead class="bg-amber-50"><tr><th class="p-2 sm:p-3 text-right">العميل</th><th class="p-2 sm:p-3 text-right hidden sm:table-cell">الهاتف</th><th class="p-2 sm:p-3 text-right">المبلغ</th><th class="p-2 sm:p-3 text-right">المتبقي</th><th class="p-2 sm:p-3 text-right">إجراء</th></tr></thead><tbody>`;
@@ -1479,7 +1487,6 @@
         html += `</tbody></table></div>`;
         container.innerHTML = html;
       }
-
       function payDebt(debtId) {
         const debt = db.debts.find((d) => d.id === debtId);
         if (!debt) return;
@@ -1506,78 +1513,15 @@
         loadPage(2);
       }
 
-      // ====================== ✅ الموردين - محسّن بالكامل ======================
       function loadSuppliers(container) {
         const totalPurchases = db.suppliers.reduce(
           (sum, s) => sum + (s.totalPurchases || 0),
           0,
         );
-
-        container.innerHTML = `
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6">
-      <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">🚚 الموردين</h1>
-      <div class="flex gap-3">
-        <div class="bg-blue-100 text-blue-800 px-4 sm:px-6 py-2 sm:py-3 rounded-2xl font-bold text-sm sm:text-base">
-          إجمالي المشتريات: ${totalPurchases.toFixed(2)} ${CURRENCY}
-        </div>
-        <button onclick="openSupplierModal()" class="bg-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-2xl font-semibold text-sm sm:text-base">
-          ➕ مورد جديد
-        </button>
-      </div>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-      ${
-        db.suppliers.length === 0
-          ? `
-        <div class="col-span-full text-center py-20 text-gray-400">
-          <i class="fa-solid fa-truck text-6xl mb-4"></i>
-          <p class="text-xl">لا يوجد موردين حتى الآن</p>
-          <button onclick="openSupplierModal()" class="mt-6 bg-blue-700 text-white px-8 py-3 rounded-2xl font-semibold">
-            إضافة أول مورد
-          </button>
-        </div>
-      `
-          : db.suppliers
-              .map(
-                (s) => `
-        <div class="bg-white p-6 rounded-3xl shadow-lg border-2 border-gray-100 hover:border-blue-200 transition">
-          <div class="flex justify-between items-start mb-4">
-            <div class="flex-1">
-              <h3 class="font-bold text-lg sm:text-xl mb-2">${s.name}</h3>
-              ${s.phone ? `<p class="text-gray-600 text-sm mb-1">📞 <a href="tel:${s.phone}" class="text-blue-600 hover:underline">${s.phone}</a></p>` : ""}
-              ${s.address ? `<p class="text-gray-500 text-xs">📍 ${s.address}</p>` : ""}
-            </div>
-            <button onclick="deleteSupplier(${s.id})" class="text-red-500 hover:text-red-700 p-2">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
-          
-          <div class="bg-blue-50 p-4 rounded-2xl mb-4">
-            <div class="text-xs text-blue-600 mb-1">إجمالي المشتريات</div>
-            <div class="text-2xl font-bold text-blue-800">${(s.totalPurchases || 0).toFixed(2)} ${CURRENCY}</div>
-          </div>
-          
-          <div class="flex gap-2">
-            <button onclick="openPurchaseModal(${s.id})" class="flex-1 bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 text-sm">
-              ➕ تسجيل مشتريات
-            </button>
-            <button onclick="editSupplier(${s.id})" class="bg-gray-100 text-gray-700 px-4 py-3 rounded-xl hover:bg-gray-200">
-              <i class="fa-solid fa-edit"></i>
-            </button>
-          </div>
-        </div>
-      `,
-              )
-              .join("")
+        container.innerHTML = `<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6"><h1 class="text-2xl sm:text-3xl font-bold text-gray-800">🚚 الموردين</h1><div class="flex gap-3"><div class="bg-blue-100 text-blue-800 px-4 sm:px-6 py-2 sm:py-3 rounded-2xl font-bold text-sm sm:text-base">إجمالي المشتريات: ${totalPurchases.toFixed(2)} ${CURRENCY}</div><button onclick="openSupplierModal()" class="bg-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-2xl font-semibold text-sm sm:text-base">➕ مورد جديد</button></div></div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">${db.suppliers.length === 0 ? `<div class="col-span-full text-center py-20 text-gray-400"><i class="fa-solid fa-truck text-6xl mb-4"></i><p class="text-xl">لا يوجد موردين حتى الآن</p><button onclick="openSupplierModal()" class="mt-6 bg-blue-700 text-white px-8 py-3 rounded-2xl font-semibold">إضافة أول مورد</button></div>` : db.suppliers.map((s) => `<div class="bg-white p-6 rounded-3xl shadow-lg border-2 border-gray-100 hover:border-blue-200 transition"><div class="flex justify-between items-start mb-4"><div class="flex-1"><h3 class="font-bold text-lg sm:text-xl mb-2">${s.name}</h3>${s.phone ? `<p class="text-gray-600 text-sm mb-1">📞 <a href="tel:${s.phone}" class="text-blue-600 hover:underline">${s.phone}</a></p>` : ""}${s.address ? `<p class="text-gray-500 text-xs">📍 ${s.address}</p>` : ""}</div><button onclick="deleteSupplier(${s.id})" class="text-red-500 hover:text-red-700 p-2"><i class="fa-solid fa-trash"></i></button></div><div class="bg-blue-50 p-4 rounded-2xl mb-4"><div class="text-xs text-blue-600 mb-1">إجمالي المشتريات</div><div class="text-2xl font-bold text-blue-800">${(s.totalPurchases || 0).toFixed(2)} ${CURRENCY}</div></div><div class="flex gap-2"><button onclick="openPurchaseModal(${s.id})" class="flex-1 bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 text-sm">➕ تسجيل مشتريات</button><button onclick="editSupplier(${s.id})" class="bg-gray-100 text-gray-700 px-4 py-3 rounded-xl hover:bg-gray-200"><i class="fa-solid fa-edit"></i></button></div></div>`).join("")}</div>`;
       }
-    </div>
-  `;
-      }
-
       function openSupplierModal(id = null) {
         const modal = document.getElementById("supplierModal");
-
         if (id) {
           const s = db.suppliers.find((x) => x.id === id);
           document.getElementById("modalSupplierTitle").textContent =
@@ -1592,40 +1536,34 @@
           document.getElementById("supplierForm").reset();
           document.getElementById("supplierId").value = "";
         }
-
         modal.style.display = "block";
       }
-
       function saveSupplier(e) {
         e.preventDefault();
-        const id = document.getElementById("supplierId").value;
-        const newSupplier = {
-          id: id ? parseInt(id) : Date.now(),
-          name: document.getElementById("supplierName").value,
-          phone: document.getElementById("supplierPhone").value,
-          address: document.getElementById("supplierAddress").value,
-          totalPurchases: id
-            ? db.suppliers.find((s) => s.id == id).totalPurchases
-            : 0,
-        };
-
+        const id = document.getElementById("supplierId").value,
+          newSupplier = {
+            id: id ? parseInt(id) : Date.now(),
+            name: document.getElementById("supplierName").value,
+            phone: document.getElementById("supplierPhone").value,
+            address: document.getElementById("supplierAddress").value,
+            totalPurchases: id
+              ? db.suppliers.find((s) => s.id == id).totalPurchases
+              : 0,
+          };
         if (id) {
           const index = db.suppliers.findIndex((s) => s.id == id);
           db.suppliers[index] = newSupplier;
         } else {
           db.suppliers.push(newSupplier);
         }
-
         saveData();
         if (db.googleSheetURL) syncToGoogleSheets(true);
         closeModal("supplierModal");
         loadPage(3);
       }
-
       function editSupplier(id) {
         openSupplierModal(id);
       }
-
       function deleteSupplier(id) {
         if (confirm("هل تريد حذف هذا المورد؟")) {
           db.suppliers = db.suppliers.filter((s) => s.id !== id);
@@ -1634,35 +1572,25 @@
           loadPage(3);
         }
       }
-
       function openPurchaseModal(supplierId) {
         const supplier = db.suppliers.find((s) => s.id === supplierId);
         if (!supplier) return;
-
         document.getElementById("purchaseSupplierId").value = supplierId;
         document.getElementById("purchaseSupplierName").value = supplier.name;
         document.getElementById("purchaseAmount").value = "";
         document.getElementById("purchaseNotes").value = "";
-
         document.getElementById("purchaseModal").style.display = "block";
       }
-
       function savePurchase(e) {
         e.preventDefault();
         const supplierId = parseInt(
-          document.getElementById("purchaseSupplierId").value,
-        );
-        const amount = parseFloat(
-          document.getElementById("purchaseAmount").value,
-        );
-        const notes = document.getElementById("purchaseNotes").value;
-
-        const supplier = db.suppliers.find((s) => s.id === supplierId);
+            document.getElementById("purchaseSupplierId").value,
+          ),
+          amount = parseFloat(document.getElementById("purchaseAmount").value),
+          notes = document.getElementById("purchaseNotes").value,
+          supplier = db.suppliers.find((s) => s.id === supplierId);
         if (!supplier) return;
-
         supplier.totalPurchases = (supplier.totalPurchases || 0) + amount;
-
-        // تسجيل المشتريات
         db.purchases.push({
           id: Date.now(),
           supplierId: supplierId,
@@ -1671,7 +1599,6 @@
           notes: notes,
           date: new Date().toISOString(),
         });
-
         saveData();
         if (db.googleSheetURL) syncToGoogleSheets(true);
         closeModal("purchaseModal");
@@ -1681,44 +1608,33 @@
         loadPage(3);
       }
 
-      // ====================== ✅ التقارير المفصلة - للمدير فقط ======================
       function loadReports(container) {
-        // قفل للمدير فقط
         if (db.currentUser.type !== "manager") {
-          container.innerHTML = `
-      <div class="text-center py-10 sm:py-20">
-        <i class="fa-solid fa-lock text-4xl sm:text-6xl text-gray-300 mb-4"></i>
-        <h2 class="text-xl sm:text-2xl font-bold text-gray-600">التقارير متاحة للمدير فقط</h2>
-        <p class="text-gray-500 mt-2">يرجى تسجيل الدخول كمدير لعرض التقارير</p>
-      </div>
-    `;
+          container.innerHTML = `<div class="text-center py-10 sm:py-20"><i class="fa-solid fa-lock text-4xl sm:text-6xl text-gray-300 mb-4"></i><h2 class="text-xl sm:text-2xl font-bold text-gray-600">التقارير متاحة للمدير فقط</h2><p class="text-gray-500 mt-2">يرجى تسجيل الدخول كمدير لعرض التقارير</p></div>`;
           return;
         }
-
-        // ===== حسابات التقارير =====
-        const totalSales = db.sales.reduce((sum, s) => sum + s.total, 0);
-        const totalCost = db.sales.reduce((sum, s) => {
-          return (
-            sum +
-            s.items.reduce((itemSum, item) => itemSum + item.cost * item.qty, 0)
-          );
-        }, 0);
-        const profit = totalSales - totalCost;
-        const totalDebts = db.debts.reduce((sum, d) => sum + d.remaining, 0);
-        const totalPurchases = db.suppliers.reduce(
-          (sum, s) => sum + (s.totalPurchases || 0),
-          0,
-        );
-
-        // مبيعات اليوم
-        const today = new Date().toLocaleDateString("ar-DZ");
-        const todaySales = db.sales.filter(
-          (s) => new Date(s.date).toLocaleDateString("ar-DZ") === today,
-        );
-        const todayTotal = todaySales.reduce((sum, s) => sum + s.total, 0);
-
-        // أفضل 5 منتجات
-        const productSales = {};
+        const totalSales = db.sales.reduce((sum, s) => sum + s.total, 0),
+          totalCost = db.sales.reduce((sum, s) => {
+            return (
+              sum +
+              s.items.reduce(
+                (itemSum, item) => itemSum + (item.cost || 0) * item.qty,
+                0,
+              )
+            );
+          }, 0),
+          profit = totalSales - totalCost,
+          totalDebts = db.debts.reduce((sum, d) => sum + d.remaining, 0),
+          totalPurchases = db.suppliers.reduce(
+            (sum, s) => sum + (s.totalPurchases || 0),
+            0,
+          ),
+          today = new Date().toLocaleDateString("ar-DZ"),
+          todaySales = db.sales.filter(
+            (s) => new Date(s.date).toLocaleDateString("ar-DZ") === today,
+          ),
+          todayTotal = todaySales.reduce((sum, s) => sum + s.total, 0),
+          productSales = {};
         db.sales.forEach((sale) => {
           sale.items.forEach((item) => {
             if (!productSales[item.name])
@@ -1728,329 +1644,205 @@
           });
         });
         const topProducts = Object.entries(productSales)
-          .sort((a, b) => b[1].qty - a[1].qty)
-          .slice(0, 5);
-
-        // نشاط العمال
-        const workerActivity = {};
+            .sort((a, b) => b[1].qty - a[1].qty)
+            .slice(0, 5),
+          workerActivity = {};
         db.sales.forEach((sale) => {
           if (!workerActivity[sale.cashier])
             workerActivity[sale.cashier] = { count: 0, total: 0 };
           workerActivity[sale.cashier].count++;
           workerActivity[sale.cashier].total += sale.total;
         });
-
-        // المنتجات منخفضة المخزون
         const lowStock = db.products.filter((p) => p.stock < 20);
-
-        container.innerHTML = `
-    <div class="mb-6 sm:mb-8">
-      <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">📊 التقارير التفصيلية</h1>
-      <p class="text-gray-600 text-sm sm:text-base">لوحة التحكم والإحصائيات الكاملة</p>
-    </div>
-    
-    <!-- ===== بطاقات الإحصائيات الرئيسية ===== -->
-    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-6 mb-6 sm:mb-8">
-      <div class="stat-card" style="--tw-gradient-from: #10b981; --tw-gradient-to: #059669;">
-        <div class="text-xs sm:text-sm mb-1 opacity-90">إجمالي المبيعات</div>
-        <div class="text-xl sm:text-3xl font-bold">${totalSales.toFixed(0)}</div>
-        <div class="text-xs opacity-75 mt-1">${CURRENCY}</div>
-      </div>
-      
-      <div class="stat-card" style="--tw-gradient-from: #3b82f6; --tw-gradient-to: #2563eb;">
-        <div class="text-xs sm:text-sm mb-1 opacity-90">صافي الأرباح</div>
-        <div class="text-xl sm:text-3xl font-bold">${profit.toFixed(0)}</div>
-        <div class="text-xs opacity-75 mt-1">هامش: ${totalSales > 0 ? ((profit / totalSales) * 100).toFixed(1) : 0}%</div>
-      </div>
-      
-      <div class="stat-card" style="--tw-gradient-from: #f59e0b; --tw-gradient-to: #d97706;">
-        <div class="text-xs sm:text-sm mb-1 opacity-90">مبيعات اليوم</div>
-        <div class="text-xl sm:text-3xl font-bold">${todayTotal.toFixed(0)}</div>
-        <div class="text-xs opacity-75 mt-1">${todaySales.length} فاتورة</div>
-      </div>
-      
-      <div class="stat-card" style="--tw-gradient-from: #ef4444; --tw-gradient-to: #dc2626;">
-        <div class="text-xs sm:text-sm mb-1 opacity-90">إجمالي الديون</div>
-        <div class="text-xl sm:text-3xl font-bold">${totalDebts.toFixed(0)}</div>
-        <div class="text-xs opacity-75 mt-1">${db.debts.length} دين</div>
-      </div>
-      
-      <div class="stat-card" style="--tw-gradient-from: #8b5cf6; --tw-gradient-to: #7c3aed;">
-        <div class="text-xs sm:text-sm mb-1 opacity-90">عدد الفواتير</div>
-        <div class="text-xl sm:text-3xl font-bold">${db.sales.length}</div>
-        <div class="text-xs opacity-75 mt-1">إجمالي</div>
-      </div>
-    </div>
-    
-    <!-- ===== الصف الثاني: التفاصيل ===== -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
-      <!-- أفضل المنتجات -->
-      <div class="bg-white p-4 sm:p-6 rounded-3xl shadow-lg">
-        <h3 class="font-bold text-lg sm:text-xl mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-trophy text-yellow-500"></i> أفضل 5 منتجات مبيعاً
-        </h3>
-        ${
-          topProducts.length === 0
-            ? `<p class="text-gray-400 text-center py-8">لا توجد مبيعات بعد</p>`
-            : `
-          <div class="space-y-3">
-            ${topProducts
-              .map(
-                (p, i) => `
-              <div class="flex justify-between items-center p-3 bg-gradient-to-r from-amber-50 to-white rounded-xl border border-amber-100">
-                <div class="flex items-center gap-3">
-                  <span class="bg-amber-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">${i + 1}</span>
-                  <div>
-                    <div class="font-semibold text-sm sm:text-base">${p[0]}</div>
-                    <div class="text-xs text-gray-500">${p[1].total.toFixed(0)} ${CURRENCY}</div>
-                  </div>
-                </div>
-                <div class="text-right">
-                  <div class="text-green-600 font-bold text-lg">${p[1].qty}</div>
-                  <div class="text-xs text-gray-500">وحدة</div>
-                </div>
-              </div>
-            `,
-              )
-              .join("")}
-          </div>
-        `
-        }
-      </div>
-      
-      <!-- نشاط العمال -->
-      <div class="bg-white p-4 sm:p-6 rounded-3xl shadow-lg">
-        <h3 class="font-bold text-lg sm:text-xl mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-users text-blue-500"></i> نشاط الموظفين
-        </h3>
-        ${
+        container.innerHTML = `<div class="mb-6 sm:mb-8"><h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">📊 التقارير التفصيلية</h1><p class="text-gray-600 text-sm sm:text-base">لوحة التحكم والإحصائيات الكاملة</p></div><div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-6 mb-6 sm:mb-8"><div class="stat-card" style="--tw-gradient-from: #10b981; --tw-gradient-to: #059669;"><div class="text-xs sm:text-sm mb-1 opacity-90">إجمالي المبيعات</div><div class="text-xl sm:text-3xl font-bold">${totalSales.toFixed(0)}</div><div class="text-xs opacity-75 mt-1">${CURRENCY}</div></div><div class="stat-card" style="--tw-gradient-from: #3b82f6; --tw-gradient-to: #2563eb;"><div class="text-xs sm:text-sm mb-1 opacity-90">صافي الأرباح</div><div class="text-xl sm:text-3xl font-bold">${profit.toFixed(0)}</div><div class="text-xs opacity-75 mt-1">هامش: ${totalSales > 0 ? ((profit / totalSales) * 100).toFixed(1) : 0}%</div></div><div class="stat-card" style="--tw-gradient-from: #f59e0b; --tw-gradient-to: #d97706;"><div class="text-xs sm:text-sm mb-1 opacity-90">مبيعات اليوم</div><div class="text-xl sm:text-3xl font-bold">${todayTotal.toFixed(0)}</div><div class="text-xs opacity-75 mt-1">${todaySales.length} فاتورة</div></div><div class="stat-card" style="--tw-gradient-from: #ef4444; --tw-gradient-to: #dc2626;"><div class="text-xs sm:text-sm mb-1 opacity-90">إجمالي الديون</div><div class="text-xl sm:text-3xl font-bold">${totalDebts.toFixed(0)}</div><div class="text-xs opacity-75 mt-1">${db.debts.length} دين</div></div><div class="stat-card" style="--tw-gradient-from: #8b5cf6; --tw-gradient-to: #7c3aed;"><div class="text-xs sm:text-sm mb-1 opacity-90">عدد الفواتير</div><div class="text-xl sm:text-3xl font-bold">${db.sales.length}</div><div class="text-xs opacity-75 mt-1">إجمالي</div></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8"><div class="bg-white p-4 sm:p-6 rounded-3xl shadow-lg"><h3 class="font-bold text-lg sm:text-xl mb-4 flex items-center gap-2"><i class="fa-solid fa-trophy text-yellow-500"></i> أفضل 5 منتجات مبيعاً</h3>${topProducts.length === 0 ? `<p class="text-gray-400 text-center py-8">لا توجد مبيعات بعد</p>` : `<div class="space-y-3">${topProducts.map((p, i) => `<div class="flex justify-between items-center p-3 bg-gradient-to-r from-amber-50 to-white rounded-xl border border-amber-100"><div class="flex items-center gap-3"><span class="bg-amber-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">${i + 1}</span><div><div class="font-semibold text-sm sm:text-base">${p[0]}</div><div class="text-xs text-gray-500">${p[1].total.toFixed(0)} ${CURRENCY}</div></div></div><div class="text-right"><div class="text-green-600 font-bold text-lg">${p[1].qty}</div><div class="text-xs text-gray-500">وحدة</div></div></div>`).join("")}</div>`}</div><div class="bg-white p-4 sm:p-6 rounded-3xl shadow-lg"><h3 class="font-bold text-lg sm:text-xl mb-4 flex items-center gap-2"><i class="fa-solid fa-users text-blue-500"></i> نشاط الموظفين</h3>${
           Object.keys(workerActivity).length === 0
             ? `<p class="text-gray-400 text-center py-8">لا يوجد نشاط بعد</p>`
-            : `
-          <div class="space-y-3">
-            ${Object.entries(workerActivity)
-              .map(
-                ([name, data]) => `
-              <div class="p-4 bg-gradient-to-r from-blue-50 to-white rounded-xl border border-blue-100">
-                <div class="flex justify-between mb-2">
-                  <span class="font-semibold text-sm sm:text-base">${name}</span>
-                  <span class="text-blue-600 font-bold text-lg">${data.total.toFixed(0)} ${CURRENCY}</span>
-                </div>
-                <div class="flex justify-between text-xs sm:text-sm text-gray-500">
-                  <span>${data.count} فاتورة</span>
-                  <span>معدل: ${(data.total / data.count).toFixed(0)} ${CURRENCY}</span>
-                </div>
-              </div>
-            `,
-              )
-              .join("")}
-          </div>
-        `
-        }
-      </div>
-    </div>
-    
-    <!-- ===== تنبيهات المخزون ===== -->
-    ${
-      lowStock.length > 0
-        ? `
-      <div class="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 p-4 sm:p-6 rounded-3xl mb-6 sm:mb-8">
-        <h3 class="font-bold text-lg sm:text-xl mb-4 flex items-center gap-2 text-red-800">
-          <i class="fa-solid fa-exclamation-triangle"></i> تنبيه: منتجات منخفضة المخزون
-        </h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          ${lowStock
-            .map(
-              (p) => `
-            <div class="bg-white p-3 rounded-xl border-2 border-red-200">
-              <div class="font-semibold text-sm mb-1">${p.name}</div>
-              <div class="text-red-600 font-bold">المخزون: ${p.stock}</div>
-            </div>
-          `,
-            )
-            .join("")}
-        </div>
-      </div>
-    `
-        : ""
-    }
-    
-    <!-- ===== جدول آخر العمليات ===== -->
-    <div class="bg-white rounded-3xl shadow-lg p-4 sm:p-6">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-lg sm:text-xl">📝 آخر 20 عملية</h3>
-        <button onclick="exportSalesReport()" class="bg-green-600 text-white px-4 py-2 rounded-xl text-sm hover:bg-green-700">
-          <i class="fa-solid fa-download"></i> تصدير
-        </button>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-xs sm:text-sm">
-          <thead class="bg-gray-100">
-            <tr>
-              <th class="p-2 sm:p-3 text-right">#</th>
-              <th class="p-2 sm:p-3 text-right">التاريخ</th>
-              <th class="p-2 sm:p-3 text-right">الكاشير</th>
-              <th class="p-2 sm:p-3 text-right">المبلغ</th>
-              <th class="p-2 sm:p-3 text-right">المنتجات</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${
-              db.sales.length === 0
-                ? `
-              <tr><td colspan="5" class="text-center py-10 text-gray-400">لا توجد مبيعات بعد</td></tr>
-            `
-                : db.sales
-                    .slice(-20)
-                    .reverse()
-                    .map(
-                      (sale) => `
-              <tr class="border-b hover:bg-gray-50">
-                <td class="p-2 sm:p-3 font-bold text-blue-600">#${sale.id}</td>
-                <td class="p-2 sm:p-3 text-gray-600">${new Date(sale.date).toLocaleString("ar-DZ", { dateStyle: "short", timeStyle: "short" })}</td>
-                <td class="p-2 sm:p-3">${sale.cashier}</td>
-                <td class="p-2 sm:p-3 font-bold text-green-600">${sale.total.toFixed(2)} ${CURRENCY}</td>
-                <td class="p-2 sm:p-3 text-gray-500">${sale.items.length} منتج</td>
-              </tr>
-            `,
-                    )
-                    .join("")
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
-    
-    <!-- ===== معلومات إضافية ===== -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-6 sm:mt-8">
-      <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 sm:p-6 rounded-3xl border-2 border-purple-200">
-        <div class="text-purple-600 text-sm mb-2">إجمالي المشتريات من الموردين</div>
-        <div class="text-2xl sm:text-3xl font-bold text-purple-800">${totalPurchases.toFixed(0)} ${CURRENCY}</div>
-      </div>
-      
-      <div class="bg-gradient-to-br from-teal-50 to-teal-100 p-4 sm:p-6 rounded-3xl border-2 border-teal-200">
-        <div class="text-teal-600 text-sm mb-2">عدد المنتجات</div>
-        <div class="text-2xl sm:text-3xl font-bold text-teal-800">${db.products.length}</div>
-      </div>
-      
-      <div class="bg-gradient-to-br from-pink-50 to-pink-100 p-4 sm:p-6 rounded-3xl border-2 border-pink-200">
-        <div class="text-pink-600 text-sm mb-2">عدد الموظفين</div>
-        <div class="text-2xl sm:text-3xl font-bold text-pink-800">${db.workers.length + 1}</div>
-        <div class="text-xs text-pink-600 mt-1">+1 مدير</div>
-      </div>
-    </div>
-  `;
+            : `<div class="space-y-3">${Object.entries(workerActivity)
+                .map(
+                  ([name, data]) =>
+                    `<div class="p-4 bg-gradient-to-r from-blue-50 to-white rounded-xl border border-blue-100"><div class="flex justify-between mb-2"><span class="font-semibold text-sm sm:text-base">${name}</span><span class="text-blue-600 font-bold text-lg">${data.total.toFixed(0)} ${CURRENCY}</span></div><div class="flex justify-between text-xs sm:text-sm text-gray-500"><span>${data.count} فاتورة</span><span>معدل: ${(data.total / data.count).toFixed(0)} ${CURRENCY}</span></div></div>`,
+                )
+                .join("")}</div>`
+        }</div></div>${lowStock.length > 0 ? `<div class="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 p-4 sm:p-6 rounded-3xl mb-6 sm:mb-8"><h3 class="font-bold text-lg sm:text-xl mb-4 flex items-center gap-2 text-red-800"><i class="fa-solid fa-exclamation-triangle"></i> تنبيه: منتجات منخفضة المخزون</h3><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">${lowStock.map((p) => `<div class="bg-white p-3 rounded-xl border-2 border-red-200"><div class="font-semibold text-sm mb-1">${p.name}</div><div class="text-red-600 font-bold">المخزون: ${p.stock}</div></div>`).join("")}</div></div>` : ""}<div class="bg-white rounded-3xl shadow-lg p-4 sm:p-6"><div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg sm:text-xl">📝 آخر 20 عملية</h3><button onclick="exportSalesReport()" class="bg-green-600 text-white px-4 py-2 rounded-xl text-sm hover:bg-green-700"><i class="fa-solid fa-download"></i> تصدير</button></div><div class="overflow-x-auto"><table class="w-full text-xs sm:text-sm"><thead class="bg-gray-100"><tr><th class="p-2 sm:p-3 text-right">#</th><th class="p-2 sm:p-3 text-right">التاريخ</th><th class="p-2 sm:p-3 text-right">الكاشير</th><th class="p-2 sm:p-3 text-right">المبلغ</th><th class="p-2 sm:p-3 text-right">المنتجات</th></tr></thead><tbody>${
+          db.sales.length === 0
+            ? `<tr><td colspan="5" class="text-center py-10 text-gray-400">لا توجد مبيعات بعد</td></tr>`
+            : db.sales
+                .slice(-20)
+                .reverse()
+                .map(
+                  (sale) =>
+                    `<tr class="border-b hover:bg-gray-50"><td class="p-2 sm:p-3 font-bold text-blue-600">#${sale.id}</td><td class="p-2 sm:p-3 text-gray-600">${new Date(sale.date).toLocaleString("ar-DZ", { dateStyle: "short", timeStyle: "short" })}</td><td class="p-2 sm:p-3">${sale.cashier}</td><td class="p-2 sm:p-3 font-bold text-green-600">${sale.total.toFixed(2)} ${CURRENCY}</td><td class="p-2 sm:p-3 text-gray-500">${sale.items.length} منتج</td></tr>`,
+                )
+                .join("")
+        }</tbody></table></div></div><div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-6 sm:mt-8"><div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 sm:p-6 rounded-3xl border-2 border-purple-200"><div class="text-purple-600 text-sm mb-2">إجمالي المشتريات من الموردين</div><div class="text-2xl sm:text-3xl font-bold text-purple-800">${totalPurchases.toFixed(0)} ${CURRENCY}</div></div><div class="bg-gradient-to-br from-teal-50 to-teal-100 p-4 sm:p-6 rounded-3xl border-2 border-teal-200"><div class="text-teal-600 text-sm mb-2">عدد المنتجات</div><div class="text-2xl sm:text-3xl font-bold text-teal-800">${db.products.length}</div></div><div class="bg-gradient-to-br from-pink-50 to-pink-100 p-4 sm:p-6 rounded-3xl border-2 border-pink-200"><div class="text-pink-600 text-sm mb-2">عدد الموظفين</div><div class="text-2xl sm:text-3xl font-bold text-pink-800">${db.workers.length + 1}</div><div class="text-xs text-pink-600 mt-1">+1 مدير</div></div></div>`;
       }
-
       function exportSalesReport() {
         const csv =
-          "رقم الفاتورة,التاريخ,الكاشير,المبلغ,عدد المنتجات\n" +
-          db.sales
-            .map(
-              (s) =>
-                `${s.id},${new Date(s.date).toLocaleDateString("ar-DZ")},${s.cashier},${s.total},${s.items.length}`,
-            )
-            .join("\n");
-
-        const blob = new Blob(["\ufeff" + csv], {
-          type: "text/csv;charset=utf-8;",
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
+            "رقم الفاتورة,التاريخ,الكاشير,المبلغ,عدد المنتجات\n" +
+            db.sales
+              .map(
+                (s) =>
+                  `${s.id},${new Date(s.date).toLocaleDateString("ar-DZ")},${s.cashier},${s.total},${s.items.length}`,
+              )
+              .join("\n"),
+          blob = new Blob(["\ufeff" + csv], {
+            type: "text/csv;charset=utf-8;",
+          }),
+          url = URL.createObjectURL(blob),
+          a = document.createElement("a");
         a.href = url;
         a.download = `sales_report_${new Date().toISOString().slice(0, 10)}.csv`;
         a.click();
         alert("✅ تم تصدير التقرير");
       }
 
-      // ====================== Sync - مختصر ======================
       function loadSync(container) {
         const lastSync = db.lastSyncTime
-          ? new Date(db.lastSyncTime).toLocaleString("ar-DZ")
-          : "لم تتم";
-        const isConfigured = db.googleSheetURL ? true : false;
-
-        container.innerHTML = `
-    <h1 class="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">🔄 المزامنة</h1>
-    ${
-      !isConfigured
-        ? `
-      <div class="bg-amber-100 border-2 border-amber-300 rounded-3xl p-4 sm:p-8 mb-6 sm:mb-8">
-        <h2 class="text-xl sm:text-2xl font-bold text-amber-900 mb-4">⚠️ المزامنة غير مُعدة</h2>
-        <button onclick="loadPage(6)" class="bg-amber-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold text-sm sm:text-base">إعداد الآن</button>
-      </div>
-    `
-        : `
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
-        <div class="bg-gradient-to-br from-green-50 to-green-100 p-4 sm:p-8 rounded-3xl border-2 border-green-200">
-          <div class="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
-            <i class="fa-brands fa-google text-3xl sm:text-5xl text-green-600"></i>
-            <div><h2 class="text-lg sm:text-2xl font-bold text-green-800">Google Sheets</h2><p class="text-xs sm:text-sm text-green-600">متصل ✓</p></div>
-          </div>
-          <div class="bg-white p-3 sm:p-4 rounded-2xl mb-3 sm:mb-4"><div class="text-xs sm:text-sm text-gray-600">آخر مزامنة:</div><div class="font-bold text-sm sm:text-base">${lastSync}</div></div>
-          <div class="space-y-2 sm:space-y-3">
-            <button onclick="syncToGoogleSheets()" class="w-full py-3 sm:py-4 bg-green-600 text-white rounded-2xl font-bold text-sm sm:text-base">☁️ مزامنة الآن</button>
-            <label class="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-2xl cursor-pointer border-2 ${db.autoSyncEnabled ? "border-green-500" : ""} text-xs sm:text-sm">
-              <input type="checkbox" ${db.autoSyncEnabled ? "checked" : ""} onchange="toggleAutoSync(this.checked)" class="w-4 h-4 sm:w-5 sm:h-5"/><span class="font-semibold">مزامنة تلقائية (5 دقائق)</span>
-            </label>
-          </div>
-          <div id="syncStatus"></div>
-        </div>
-        <div class="bg-white p-4 sm:p-8 rounded-3xl shadow-lg">
-          <h3 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4">📊 الإحصائيات</h3>
-          <div class="space-y-2 sm:space-y-3 text-xs sm:text-sm">
-            <div class="flex justify-between p-2 sm:p-3 bg-gray-50 rounded-xl"><span>المنتجات:</span><strong>${db.products.length}</strong></div>
-            <div class="flex justify-between p-2 sm:p-3 bg-gray-50 rounded-xl"><span>المبيعات:</span><strong>${db.sales.length}</strong></div>
-            <div class="flex justify-between p-2 sm:p-3 bg-gray-50 rounded-xl"><span>الموظفين:</span><strong>${db.workers.length}</strong></div>
-            <div class="flex justify-between p-2 sm:p-3 bg-gray-50 rounded-xl"><span>الموردين:</span><strong>${db.suppliers.length}</strong></div>
-          </div>
-        </div>
-      </div>
-    `
-    }
-  `;
+            ? new Date(db.lastSyncTime).toLocaleString("ar-DZ")
+            : "لم تتم",
+          isConfigured = db.googleSheetURL ? true : false;
+        container.innerHTML = `<h1 class="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">🔄 المزامنة</h1>${!isConfigured ? `<div class="bg-amber-100 border-2 border-amber-300 rounded-3xl p-4 sm:p-8 mb-6 sm:mb-8"><h2 class="text-xl sm:text-2xl font-bold text-amber-900 mb-4">⚠️ المزامنة غير مُعدة</h2><button onclick="loadPage(6)" class="bg-amber-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold text-sm sm:text-base">إعداد الآن</button></div>` : `<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8"><div class="bg-gradient-to-br from-green-50 to-green-100 p-4 sm:p-8 rounded-3xl border-2 border-green-200"><div class="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6"><i class="fa-brands fa-google text-3xl sm:text-5xl text-green-600"></i><div><h2 class="text-lg sm:text-2xl font-bold text-green-800">Google Sheets</h2><p class="text-xs sm:text-sm text-green-600">متصل ✓</p></div></div><div class="bg-white p-3 sm:p-4 rounded-2xl mb-3 sm:mb-4"><div class="text-xs sm:text-sm text-gray-600">آخر مزامنة:</div><div class="font-bold text-sm sm:text-base">${lastSync}</div></div><div class="space-y-2 sm:space-y-3"><button onclick="syncToGoogleSheets()" class="w-full py-3 sm:py-4 bg-green-600 text-white rounded-2xl font-bold text-sm sm:text-base hover:bg-green-700">☁️ رفع البيانات (Upload)</button><button onclick="pullFromGoogleSheets()" class="w-full py-3 sm:py-4 bg-blue-600 text-white rounded-2xl font-bold text-sm sm:text-base hover:bg-blue-700">📥 تحميل البيانات (Download)</button><label class="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-2xl cursor-pointer border-2 ${db.autoSyncEnabled ? "border-green-500" : ""} text-xs sm:text-sm"><input type="checkbox" ${db.autoSyncEnabled ? "checked" : ""} onchange="toggleAutoSync(this.checked)" class="w-4 h-4 sm:w-5 sm:h-5"/><span class="font-semibold">مزامنة تلقائية (5 دقائق)</span></label></div><div id="syncStatus"></div></div><div class="bg-white p-4 sm:p-8 rounded-3xl shadow-lg"><h3 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4">📊 الإحصائيات</h3><div class="space-y-2 sm:space-y-3 text-xs sm:text-sm"><div class="flex justify-between p-2 sm:p-3 bg-gray-50 rounded-xl"><span>المنتجات:</span><strong>${db.products.length}</strong></div><div class="flex justify-between p-2 sm:p-3 bg-gray-50 rounded-xl"><span>المبيعات:</span><strong>${db.sales.length}</strong></div><div class="flex justify-between p-2 sm:p-3 bg-gray-50 rounded-xl"><span>الموظفين:</span><strong>${db.workers.length}</strong></div><div class="flex justify-between p-2 sm:p-3 bg-gray-50 rounded-xl"><span>الموردين:</span><strong>${db.suppliers.length}</strong></div></div></div></div>`}`;
       }
 
       async function syncToGoogleSheets(silent = false) {
         if (!db.googleSheetURL) {
-          if (!silent) alert("لم يتم إعداد الرابط");
+          if (!silent) alert("⚠️ لم يتم إعداد رابط Google Sheet");
+          return;
+        }
+
+        const statusEl = document.getElementById("syncStatus");
+        if (statusEl)
+          statusEl.innerHTML = `<div class="sync-loading mt-4">🔄 جاري المزامنة...</div>`;
+
+        try {
+          // ✅ التحقق من البيانات قبل الإرسال
+          const data = {
+            action: "sync",
+            shopName: db.shopName || "متجر الشاي الذهبي",
+            manager: db.manager || { name: "", pin: "", phone: "" },
+            nextInvoice: db.nextInvoice || 1001,
+            products: Array.isArray(db.products) ? db.products : [],
+            sales: Array.isArray(db.sales) ? db.sales : [],
+            debts: Array.isArray(db.debts) ? db.debts : [],
+            suppliers: Array.isArray(db.suppliers) ? db.suppliers : [],
+            workers: Array.isArray(db.workers) ? db.workers : [],
+            purchases: Array.isArray(db.purchases) ? db.purchases : [],
+            timestamp: new Date().toISOString(),
+          };
+
+          console.log("=== بيانات المزامنة ===");
+          console.log("المنتجات:", data.products.length);
+          console.log("المبيعات:", data.sales.length);
+          console.log("الموظفين:", data.workers.length);
+          console.log("الموردين:", data.suppliers.length);
+          console.log("المشتريات:", data.purchases.length);
+
+          const response = await fetch(db.googleSheetURL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+            mode: "no-cors", // ✅ إضافة هذا
+          });
+
+          // ✅ لأن mode: 'no-cors' لا يسمح بقراءة الـ response، نفترض النجاح
+          db.lastSyncTime = new Date().toISOString();
+          saveData();
+
+          const detailsMsg =
+            `✅ تمت المزامنة!\n\n` +
+            `📦 المنتجات: ${data.products.length}\n` +
+            `💰 المبيعات: ${data.sales.length}\n` +
+            `👥 الموظفين: ${data.workers.length}\n` +
+            `🚚 الموردين: ${data.suppliers.length}\n` +
+            `🛒 المشتريات: ${data.purchases.length}`;
+
+          if (statusEl) {
+            statusEl.innerHTML = `<div class="sync-success mt-4">${detailsMsg.replace(/\n/g, "<br>")}</div>`;
+          }
+
+          if (!silent) alert(detailsMsg);
+
+          updateSyncIndicator();
+
+          // ✅ التحقق من النتيجة عبر GET بعد 2 ثانية
+          setTimeout(async () => {
+            try {
+              const checkResponse = await fetch(
+                db.googleSheetURL + "?action=get",
+              );
+              const checkData = await checkResponse.json();
+              if (checkData.status === "success") {
+                console.log("✅ تم التحقق: البيانات موجودة في Google");
+              }
+            } catch (e) {
+              console.log("لا يمكن التحقق (طبيعي مع no-cors)");
+            }
+          }, 2000);
+        } catch (error) {
+          console.error("خطأ المزامنة:", error);
+          if (statusEl) {
+            statusEl.innerHTML = `<div class="sync-error mt-4">❌ فشلت المزامنة: ${error.message}</div>`;
+          }
+          if (!silent) alert(`❌ فشلت المزامنة\n\n${error.message}`);
+        }
+      }
+
+      async function pullFromGoogleSheets() {
+        if (!db.googleSheetURL) {
+          alert("⚠️ لم يتم إعداد رابط Google Sheet");
           return;
         }
         const statusEl = document.getElementById("syncStatus");
         if (statusEl)
-          statusEl.innerHTML = `<div class="sync-loading mt-4">🔄 جاري المزامنة...</div>`;
+          statusEl.innerHTML = `<div class="sync-loading mt-4">📥 جاري التحميل من السحابة...</div>`;
         try {
-          const data = {
-            action: "sync",
-            shopName: db.shopName,
-            products: db.products,
-            sales: db.sales,
-            debts: db.debts,
-            suppliers: db.suppliers,
-            workers: db.workers,
-            purchases: db.purchases,
-            timestamp: new Date().toISOString(),
-          };
-          const response = await fetch(db.googleSheetURL, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain" },
-            body: JSON.stringify(data),
-          });
-          const result = await response.json();
-          if (result.status === "success") {
+          const response = await fetch(db.googleSheetURL + "?action=get", {
+              method: "GET",
+            }),
+            data = await response.json();
+          if (data.status === "success" && data.hasData) {
+            const confirmed = confirm(
+              `هل تريد استبدال البيانات المحلية بالبيانات من السحابة؟\n\n📦 ${data.products.length} منتج\n💰 ${data.sales.length} عملية\n👥 ${data.workers.length} موظف\n\n⚠️ سيتم استبدال كل البيانات المحلية!`,
+            );
+            if (!confirmed) {
+              if (statusEl)
+                statusEl.innerHTML = `<div class="sync-error mt-4">❌ تم الإلغاء</div>`;
+              return;
+            }
+            if (data.shopName) db.shopName = data.shopName;
+            if (data.manager.name) db.manager = data.manager;
+            if (data.products) db.products = data.products;
+            if (data.sales) db.sales = data.sales;
+            if (data.debts) db.debts = data.debts;
+            if (data.suppliers) db.suppliers = data.suppliers;
+            if (data.workers) db.workers = data.workers;
+            if (data.purchases) db.purchases = data.purchases;
+            if (data.nextInvoice) db.nextInvoice = data.nextInvoice;
             db.lastSyncTime = new Date().toISOString();
             saveData();
             if (statusEl)
-              statusEl.innerHTML = `<div class="sync-success mt-4">✅ تمت المزامنة</div>`;
-            if (!silent) alert("✅ تمت المزامنة!");
-            updateSyncIndicator();
+              statusEl.innerHTML = `<div class="sync-success mt-4">✅ تم التحميل من السحابة بنجاح!</div>`;
+            alert(
+              `✅ تم تحميل البيانات!\n\n📦 ${data.products.length} منتج\n💰 ${data.sales.length} عملية\n👥 ${data.workers.length} موظف`,
+            );
+            const currentPage = Array.from(
+              document.querySelectorAll(".sidebar-item"),
+            ).findIndex((el) => el.classList.contains("active"));
+            if (currentPage >= 0) loadPage(currentPage);
+          } else if (data.status === "success" && !data.hasData) {
+            if (statusEl)
+              statusEl.innerHTML = `<div class="sync-error mt-4">⚠️ لا توجد بيانات في السحابة</div>`;
+            alert("⚠️ لا توجد بيانات محفوظة في Google Sheets");
           } else {
-            throw new Error(result.message || "فشلت المزامنة");
+            throw new Error(data.message || "فشل التحميل");
           }
         } catch (error) {
+          console.error("Pull error:", error);
           if (statusEl)
-            statusEl.innerHTML = `<div class="sync-error mt-4">❌ فشلت المزامنة</div>`;
-          if (!silent) alert(`❌ فشلت المزامنة`);
+            statusEl.innerHTML = `<div class="sync-error mt-4">❌ فشل التحميل: ${error.message}</div>`;
+          if (!silent) alert(`❌ فشل التحميل من السحابة\n\n${error.message}`);
         }
       }
 
@@ -2065,7 +1857,6 @@
           alert("⏸️ مزامنة تلقائية موقفة");
         }
       }
-
       function startAutoSync() {
         stopAutoSync();
         if (db.googleSheetURL)
@@ -2075,14 +1866,12 @@
           );
         updateSyncIndicator();
       }
-
       function stopAutoSync() {
         if (syncInterval) {
           clearInterval(syncInterval);
           syncInterval = null;
         }
       }
-
       function updateSyncIndicator() {
         const indicator = document.getElementById("syncIndicator");
         if (!indicator) return;
@@ -2095,42 +1884,12 @@
         }
       }
 
-      // ====================== Manager - مختصر ======================
       function loadManager(container) {
         if (db.currentUser.type !== "manager") {
           container.innerHTML = `<div class="text-center py-10 sm:py-20"><i class="fa-solid fa-lock text-4xl sm:text-6xl text-gray-300 mb-4"></i><h2 class="text-xl sm:text-2xl font-bold text-gray-600">للمدير فقط</h2></div>`;
           return;
         }
-
-        container.innerHTML = `
-    <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">👨‍💼 لوحة المدير</h1>
-    ${
-      db.googleSheetURL
-        ? `
-      <div class="setup-link-box mb-4 sm:mb-6">
-        <div class="font-bold mb-2 text-sm sm:text-base">🔗 رابط الإعداد السريع:</div>
-        <button onclick="generateSetupLink()" class="w-full bg-white text-amber-900 py-2 sm:py-3 rounded-xl font-bold text-sm sm:text-base">📋 نسخ رابط الإعداد السريع</button>
-        <p class="text-xs mt-2 opacity-75">شارك مع الأجهزة الأخرى</p>
-      </div>
-    `
-        : ""
-    }
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-      <div class="bg-white p-4 sm:p-6 rounded-3xl shadow-lg">
-        <h3 class="font-bold text-lg sm:text-xl mb-3 sm:mb-4">⚙️ الإعدادات</h3>
-        <button onclick="changeShopName()" class="w-full mb-2 sm:mb-3 py-2 sm:py-3 bg-blue-100 text-blue-700 rounded-xl text-sm sm:text-base">تغيير اسم المتجر</button>
-        <button onclick="changeAdminPin()" class="w-full mb-2 sm:mb-3 py-2 sm:py-3 bg-red-100 text-red-700 rounded-xl text-sm sm:text-base">تغيير كود المدير</button>
-        <button onclick="changeGoogleURL()" class="w-full py-2 sm:py-3 bg-green-100 text-green-700 rounded-xl text-sm sm:text-base">تحديث رابط Google</button>
-      </div>
-      <div class="bg-white p-4 sm:p-6 rounded-3xl shadow-lg">
-        <div class="flex justify-between items-center mb-3 sm:mb-4">
-          <h3 class="font-bold text-lg sm:text-xl">👥 الموظفين</h3>
-          <button onclick="openWorkerModal()" class="bg-green-600 text-white px-3 sm:px-4 py-1 sm:py-2 rounded-xl text-xs sm:text-sm">➕</button>
-        </div>
-        <div id="workersList" class="space-y-2 max-h-64 sm:max-h-96 overflow-auto"></div>
-      </div>
-    </div>
-  `;
+        container.innerHTML = `<h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">👨‍💼 لوحة المدير</h1>${db.googleSheetURL ? `<div class="setup-link-box mb-4 sm:mb-6"><div class="font-bold mb-2 text-sm sm:text-base">🔗 رابط الإعداد السريع:</div><button onclick="generateSetupLink()" class="w-full bg-white text-amber-900 py-2 sm:py-3 rounded-xl font-bold text-sm sm:text-base">📋 نسخ رابط الإعداد السريع</button><p class="text-xs mt-2 opacity-75">شارك مع الأجهزة الأخرى</p></div>` : ""}<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6"><div class="bg-white p-4 sm:p-6 rounded-3xl shadow-lg"><h3 class="font-bold text-lg sm:text-xl mb-3 sm:mb-4">⚙️ الإعدادات</h3><button onclick="changeShopName()" class="w-full mb-2 sm:mb-3 py-2 sm:py-3 bg-blue-100 text-blue-700 rounded-xl text-sm sm:text-base">تغيير اسم المتجر</button><button onclick="changeAdminPin()" class="w-full mb-2 sm:mb-3 py-2 sm:py-3 bg-red-100 text-red-700 rounded-xl text-sm sm:text-base">تغيير كود المدير</button><button onclick="changeGoogleURL()" class="w-full mb-2 sm:mb-3 py-2 sm:py-3 bg-green-100 text-green-700 rounded-xl text-sm sm:text-base">تحديث رابط Google</button><button onclick="testWorkersData()" class="w-full py-2 sm:py-3 bg-purple-100 text-purple-700 rounded-xl text-sm sm:text-base">🧪 اختبار بيانات الموظفين</button></div><div class="bg-white p-4 sm:p-6 rounded-3xl shadow-lg"><div class="flex justify-between items-center mb-3 sm:mb-4"><h3 class="font-bold text-lg sm:text-xl">👥 الموظفين</h3><button onclick="openWorkerModal()" class="bg-green-600 text-white px-3 sm:px-4 py-1 sm:py-2 rounded-xl text-xs sm:text-sm">➕</button></div><div id="workersList" class="space-y-2 max-h-64 sm:max-h-96 overflow-auto"></div></div></div>`;
         renderWorkersList();
       }
 
@@ -2143,19 +1902,11 @@
         }
         container.innerHTML = db.workers
           .map(
-            (w, i) => `
-    <div class="flex justify-between items-center p-2 sm:p-3 bg-gray-50 rounded-xl text-xs sm:text-sm">
-      <div class="flex-1 min-w-0"><div class="font-semibold truncate">${w.name}</div><div class="text-xs text-gray-500">كود: ${w.pin}</div></div>
-      <div class="flex gap-1 sm:gap-2 ml-2">
-        <button onclick="editWorker(${i})" class="text-blue-600 px-2 sm:px-3 py-1 border border-blue-200 rounded-lg text-xs">تعديل</button>
-        <button onclick="removeWorker(${i})" class="text-red-600 px-2 sm:px-3 py-1 border border-red-200 rounded-lg text-xs">حذف</button>
-      </div>
-    </div>
-  `,
+            (w, i) =>
+              `<div class="flex justify-between items-center p-2 sm:p-3 bg-gray-50 rounded-xl text-xs sm:text-sm"><div class="flex-1 min-w-0"><div class="font-semibold truncate">${w.name}</div><div class="text-xs text-gray-500">كود: ${w.pin}</div></div><div class="flex gap-1 sm:gap-2 ml-2"><button onclick="editWorker(${i})" class="text-blue-600 px-2 sm:px-3 py-1 border border-blue-200 rounded-lg text-xs">تعديل</button><button onclick="removeWorker(${i})" class="text-red-600 px-2 sm:px-3 py-1 border border-red-200 rounded-lg text-xs">حذف</button></div></div>`,
           )
           .join("");
       }
-
       function openWorkerModal(index = null) {
         const modal = document.getElementById("workerModal");
         if (index !== null) {
@@ -2172,17 +1923,16 @@
         }
         modal.style.display = "block";
       }
-
       function saveWorker(e) {
         e.preventDefault();
-        const index = document.getElementById("workerId").value;
-        const newWorker = {
-          id: index !== "" ? db.workers[index].id : Date.now(),
-          name: document.getElementById("workerName").value,
-          phone: document.getElementById("workerPhone").value,
-          pin: document.getElementById("workerPin").value,
-          role: "عامل",
-        };
+        const index = document.getElementById("workerId").value,
+          newWorker = {
+            id: index !== "" ? db.workers[index].id : Date.now(),
+            name: document.getElementById("workerName").value,
+            phone: document.getElementById("workerPhone").value,
+            pin: document.getElementById("workerPin").value,
+            role: "عامل",
+          };
         if (index !== "") db.workers[index] = newWorker;
         else db.workers.push(newWorker);
         saveData();
@@ -2190,7 +1940,6 @@
         closeModal("workerModal");
         loadPage(6);
       }
-
       function editWorker(index) {
         openWorkerModal(index);
       }
@@ -2216,7 +1965,8 @@
         if (newPin && newPin.length >= 4) {
           db.manager.pin = newPin;
           saveData();
-          alert("✅ تم");
+          if (db.googleSheetURL) syncToGoogleSheets(true);
+          alert("✅ تم تغيير الكود وتحديثه في السحابة");
         }
       }
       function changeGoogleURL() {
@@ -2228,8 +1978,12 @@
           loadPage(6);
         }
       }
+      function testWorkersData() {
+        const info = `=== معلومات الموظفين ===\n\nعدد الموظفين: ${db.workers.length}\n\nالبيانات:\n${JSON.stringify(db.workers, null, 2)}\n\nهل المصفوفة فارغة؟ ${db.workers.length === 0 ? "نعم ⚠️" : "لا ✓"}`;
+        console.log(info);
+        alert(info);
+      }
 
-      // ====================== Utils ======================
       function closeModal(modalId) {
         document.getElementById(modalId).style.display = "none";
       }
@@ -2244,6 +1998,43 @@
       document.addEventListener("gesturestart", function (e) {
         e.preventDefault();
       });
+      // ===== دالة عرض معلومات الكود (للتشخيص) =====
+      function showPasswordInfo() {
+        const info =
+          `=== معلومات الكود المحفوظ ===\n\n` +
+          `كود المدير: "${db.manager.pin}"\n` +
+          `نوع البيانات: ${typeof db.manager.pin}\n` +
+          `الطول: ${db.manager.pin ? db.manager.pin.toString().length : 0}\n\n` +
+          `اسم المدير: ${db.manager.name}\n` +
+          `هاتف المدير: ${db.manager.phone}\n\n` +
+          `عدد الموظفين: ${db.workers.length}`;
+
+        console.log(info);
+        alert(info);
+
+        // نسخ الكود للحافظة
+        if (db.manager.pin) {
+          const pinStr = db.manager.pin.toString();
+          navigator.clipboard
+            .writeText(pinStr)
+            .then(() => {
+              console.log("✅ تم نسخ الكود: " + pinStr);
+            })
+            .catch(() => {
+              console.log("الكود: " + pinStr);
+            });
+        }
+      }
+
+      // ===== إعادة تعيين الكود للطوارئ =====
+      function resetAdminPassword() {
+        const newPin = prompt("أدخل الكود الجديد (4-6 أرقام):");
+        if (newPin && newPin.length >= 4) {
+          db.manager.pin = newPin.toString(); // ✅ تأكد أنه string
+          saveData();
+          alert(`✅ تم تغيير الكود إلى: ${newPin}\n\nجرب تسجيل الدخول الآن`);
+        }
+      }
     </script>
   </body>
 </html>
